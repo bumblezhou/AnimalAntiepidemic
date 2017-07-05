@@ -11,6 +11,16 @@ public class FarmerModel {
     private String address;
     private Integer breed_type;
 
+    public FarmerModel() {
+    }
+
+    public FarmerModel(Integer id, String householder, String mobile, String address, Integer breed_type) {
+        this.id = id;
+        this.householder = householder;
+        this.mobile = mobile;
+        this.address = address;
+        this.breed_type = breed_type;
+    }
 
     public Integer getId() {
         return id;

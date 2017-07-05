@@ -9,10 +9,17 @@ import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.PortUnreachableException;
 
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
+import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+import cz.msebera.android.httpclient.util.EntityUtils;
 import qsh.com.animalantiepidemic.models.AnimalTypeModel;
 
 import static org.junit.Assert.*;
@@ -55,5 +62,33 @@ public class ExampleInstrumentedTest {
         Gson gson = new Gson();
         AnimalTypeModel[] animalTypeModels = gson.fromJson(fileContent, AnimalTypeModel[].class);
         System.out.print("共获取" + animalTypeModels.length + "条记录。");
+    }
+
+    @Test
+    public void load_animal_type_data_from_remote_server_and_store_as_local_json_file() {
+        final String url = "http://www.klmyqsh.com/wx/api/AnimalType/LoadAllAnimalTypes";
+
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            HttpPost request = new HttpPost(url);
+            StringEntity params = new StringEntity("");
+            request.addHeader("content-type", "application/json");
+            request.setEntity(params);
+            HttpResponse result = httpClient.execute(request);
+            String json = EntityUtils.toString(result.getEntity(), "UTF-8");
+
+            com.google.gson.Gson gson = new com.google.gson.Gson();
+            AnimalTypeModel[] animalTypeModels = gson.fromJson(json, AnimalTypeModel[].class);
+
+            System.out.println("共获取" + animalTypeModels.length + "条记录。");
+            System.out.println("准备存入文件animal_types.json");
+
+            //write converted json data to a file named "animal_types.json"
+            FileWriter writer = new FileWriter("animal_types.json");
+            writer.write(json);
+            writer.close();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

@@ -8,6 +8,9 @@ public class AnimalTypeModel {
     private Integer id;
     private String name;
 
+    public AnimalTypeModel() {
+    }
+
     public AnimalTypeModel(Integer id, String name) {
         this.id = id;
         this.name = name;

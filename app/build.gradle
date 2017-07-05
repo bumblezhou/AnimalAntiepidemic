@@ -39,9 +39,10 @@ dependencies {
     compile 'com.android.support:design:25.0.0'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    //compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'istat.android.data.access.sqlite:istat-access-sqlite:1.2.6'
     testCompile 'junit:junit:4.12'
     testCompile 'com.google.code.gson:gson:2.3.1'
-    testCompile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
-    testCompile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
+    testCompile 'com.loopj.android:android-async-http:1.4.9'
+    testCompile 'istat.android.data.access.sqlite:istat-access-sqlite:1.2.6'
 }

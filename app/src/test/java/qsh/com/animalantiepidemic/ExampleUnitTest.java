@@ -1,17 +1,14 @@
 package qsh.com.animalantiepidemic;
 
+import android.util.Log;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.FileWriter;
@@ -23,12 +20,17 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.StringEntity;
+import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
+import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+import cz.msebera.android.httpclient.util.EntityUtils;
 import qsh.com.animalantiepidemic.models.AnimalTypeModel;
 import qsh.com.animalantiepidemic.models.EarNumberModel;
 import qsh.com.animalantiepidemic.models.FarmerModel;
 import qsh.com.animalantiepidemic.models.UserModel;
-
-import static org.junit.Assert.assertEquals;
+import qsh.com.animalantiepidemic.security.DesHelper;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -36,10 +38,6 @@ import static org.junit.Assert.assertEquals;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
-    }
 
     @Test
     public void load_user_data_from_remote_server_and_store_as_local_json_file() {
@@ -57,7 +55,7 @@ public class ExampleUnitTest {
             UserModel[] userModels = gson.fromJson(json, UserModel[].class);
 
             System.out.println("共获取" + userModels.length + "条记录。");
-            System.out.println("准备存入文件users.json");
+            System.out.println("准备存入文件 users.json");
 
             //write converted json data to a file named "users.json"
             FileWriter writer = new FileWriter("users.json");
@@ -72,7 +70,6 @@ public class ExampleUnitTest {
     @Test
     public void load_farmer_data_from_remote_server_and_store_as_local_json_file() {
         final String url = "http://www.klmyqsh.com/wx/api/Farmer/LoadAllFarmers";
-
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             HttpPost request = new HttpPost(url);
             StringEntity params = new StringEntity("");
@@ -98,9 +95,8 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void load_animal_type_data_from_remote_server_and_store_as_local_json_file() {
+    public void load_animal_type_data_from_remote_server() {
         final String url = "http://www.klmyqsh.com/wx/api/AnimalType/LoadAllAnimalTypes";
-
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             HttpPost request = new HttpPost(url);
             StringEntity params = new StringEntity("");
@@ -160,7 +156,6 @@ public class ExampleUnitTest {
     @Test
     public void load_ear_number_data_from_remote_server_and_store_as_local_json_file() {
         final String url = "http://www.klmyqsh.com/wx/api/ShortUrl/LoadAllEarNumbers";
-
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             HttpPost request = new HttpPost(url);
             StringEntity params = new StringEntity("");
@@ -171,7 +166,6 @@ public class ExampleUnitTest {
 
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.registerTypeAdapter(Date.class, new DateDeserializer());
-
             com.google.gson.Gson gson = gsonBuilder.create();
             EarNumberModel[] earNumberModels = gson.fromJson(json, EarNumberModel[].class);
 
@@ -186,5 +180,24 @@ public class ExampleUnitTest {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Test
+    public void encrypt_and_decrypt_text() {
+        String input = "oGU0Q4B6jxkt312165LGJQ==";
+        String expected = "shubiao1229";
+        String key = "273ece6f97dd844d";
+
+        String encryptedText = DesHelper.encrypt(expected, key);
+        System.out.println("plainText:" + expected);
+        System.out.println("encryptedText:" + encryptedText);
+        //[-96, 101, 52, 67, -128, 122, -113, 25, 45, -33, 93, -75, -21, -110, -58, 37]
+        //Assert.assertEquals(encryptedText, input);
+
+        String decryptedText = DesHelper.decrypt(input, key);
+        //[-96, 101, 52, 67, -128, 122, -113, 25, 45, -33, 93, -75, -21, -110, -58, 37]
+        System.out.println("encryptedText:" + input);
+        System.out.println("decryptedText:" + decryptedText);
+        //Assert.assertEquals(decryptedText, expected);
     }
 }

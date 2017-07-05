@@ -5,12 +5,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Paint;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,20 +28,31 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import qsh.com.animalantiepidemic.contentprovider.ListLoader;
 import qsh.com.animalantiepidemic.localstate.DataHolder;
+import qsh.com.animalantiepidemic.models.AnimalTypeModel;
+import qsh.com.animalantiepidemic.models.UserComparator;
 import qsh.com.animalantiepidemic.models.UserModel;
+import qsh.com.animalantiepidemic.persistent.UserDbHelper;
+import qsh.com.animalantiepidemic.security.DesHelper;
 
 
 /**
  * Android login screen Activity
  */
-//public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements LoaderCallbacks<List<UserModel>> {
+//public class LoginActivity extends Activity {
 
-    private static final String DUMMY_CREDENTIALS = "13565459883:iloveyou@1014";
+    //private static final String DUMMY_CREDENTIALS = "13565459883:iloveyou@1014";
 
     private UserLoginTask userLoginTask = null;
     private View loginFormView;
@@ -55,9 +66,9 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        usernameTextView = (AutoCompleteTextView) findViewById(R.id.username);
-        //loadAutoComplete();
+        loadDataToSqlite();
 
+        usernameTextView = (AutoCompleteTextView) findViewById(R.id.username);
         passwordTextView = (EditText) findViewById(R.id.password);
         passwordTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -95,10 +106,9 @@ public class LoginActivity extends Activity {
             }
         });
     }
-
-//    private void loadAutoComplete() {
-//        getLoaderManager().initLoader(0, null, this);
-//    }
+    private void loadDataToSqlite() {
+        getLoaderManager().initLoader(0, null, this);
+    }
 
 
     /**
@@ -145,11 +155,6 @@ public class LoginActivity extends Activity {
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //add your own logic
-        return email.contains("@");
-    }
-
     private boolean isPasswordValid(String password) {
         //add your own logic
         return password.length() > 4;
@@ -192,11 +197,14 @@ public class LoginActivity extends Activity {
     }
 
 
-//    @Override
-//    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+    @Override
+    public Loader<List<UserModel>> onCreateLoader(int i, Bundle bundle) {
 //        return new CursorLoader(this,
 //                // Retrieve data rows for the device user's 'profile' contact.
-//                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+//                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
+//
+//                //
+//                ProfileQuery.PROJECTION,
 //
 //                // Select only phone number.
 //                ContactsContract.Contacts.Data.MIMETYPE + " = ?", new String[]{ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE},
@@ -204,44 +212,90 @@ public class LoginActivity extends Activity {
 //                // Show primary phone number first. Note that there won't be
 //                // a primary phone number if the user hasn't specified one.
 //                ContactsContract.Contacts.DISPLAY_NAME + " DESC");
-//    }
+        return new ListLoader<UserModel>(this) {
+            @Override
+            protected List<UserModel> getData() {
+                String fileContent = loadResourceFileContent(getContext(), R.raw.users);
+                Gson gson = new Gson();
+                UserModel[] userModels = gson.fromJson(fileContent, UserModel[].class);
+                return Arrays.asList(userModels);
+            }
+        };
+    }
 
-//    @Override
-//    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-//        List<String> phonese = new ArrayList<String>();
+    @Override
+    public void onLoadFinished(Loader<List<UserModel>> cursorLoader, List<UserModel> cursor) {
+        List<String> phonese = new ArrayList<String>();
 //        cursor.moveToFirst();
 //        while (!cursor.isAfterLast()) {
 //            phonese.add(cursor.getString(ProfileQuery.PHONE_NUMBER));
 //            cursor.moveToNext();
 //        }
-//
-//        addPhoneNumbersToAutoComplete(phonese);
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-//
-//    }
+        addPhoneNumbersToAutoComplete(phonese);
+
+        UserDbHelper userDbHelper = new UserDbHelper(this);
+
+        //默认按id从小到大排序
+        Collections.sort(cursor, new UserComparator());
+
+        SQLiteDatabase db = userDbHelper.getWritableDatabase();
+        //找一下库中有没有JSON文件中最大ID的记录
+        Cursor queryCursor = db.query(userDbHelper.TABLE_NAME,
+                new String[]{"id", "name", "fullName", "address", "password"},
+                "id = ?",
+                new String[] { cursor.get(cursor.size() - 1).getId().toString() },
+                null, null, null);
+
+        //如果有，则别同步了
+        if (queryCursor.getCount() > 0) {
+
+        } else {
+            db.beginTransaction();
+            for(UserModel user : cursor){
+                db.execSQL("insert into " + userDbHelper.TABLE_NAME + " (id, name, fullname, address, password) values (" + user.getId() + ", '" + user.getName() + "', '" + user.getFullName() + "', '" + user.getAddress() + "', '" + user.getPassword() + "')");
+            }
+            db.setTransactionSuccessful();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<UserModel>> cursorLoader) {
+
+    }
+
+    public String loadResourceFileContent(Context appContext, int resourceId) {
+        String result = null;
+        try {
+            InputStream is = appContext.getResources().openRawResource(resourceId);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            result = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return result;
+    }
 
     private void addPhoneNumbersToAutoComplete(List<String> phoneNumberCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, phoneNumberCollection);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(LoginActivity.this, android.R.layout.simple_dropdown_item_1line, phoneNumberCollection);
 
         usernameTextView.setAdapter(adapter);
     }
 
 
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Phone.NUMBER,
-                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-        };
-
-        int PHONE_NUMBER = 0;
-        int CONTACT_DISPLAY_NAME = 1;
-    }
+//    private interface ProfileQuery {
+//        String[] PROJECTION = {
+//                ContactsContract.CommonDataKinds.Phone.NUMBER,
+//                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+//        };
+//
+//        int PHONE_NUMBER = 0;
+//        int CONTACT_DISPLAY_NAME = 1;
+//    }
 
     /**
      * Async Login Task to authenticate
@@ -268,9 +322,24 @@ public class LoginActivity extends Activity {
             }
 
             //using a local dummy credentials store to authenticate
-            String[] pieces = DUMMY_CREDENTIALS.split(":");
-            if (pieces[0].equals(usernameStr) && pieces[1].equals(passwordStr)) {
-                return true;
+            //String[] pieces = DUMMY_CREDENTIALS.split(":");
+            UserDbHelper userDbHelper = new UserDbHelper(getBaseContext());
+            SQLiteDatabase db = userDbHelper.getWritableDatabase();
+
+            // select * from Orders where CustomName = 'Bor'
+            Cursor cursor = db.query(UserDbHelper.TABLE_NAME,
+                    new String[]{"id", "name", "fullName", "address", "password"},
+                    "name = ?",
+                    new String[] {usernameStr},
+                    null, null, null);
+
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                UserModel firstQueriedUser = userDbHelper.parseUser(cursor);
+                if(firstQueriedUser.getPassword().equals(DesHelper.encrypt(passwordStr, getResources().getString(R.string.security_key)))){
+                    return true;
+                }
+                return false;
             } else {
                 return false;
             }

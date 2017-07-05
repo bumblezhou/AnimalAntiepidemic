@@ -13,6 +13,9 @@ public class EarNumberModel {
     private String number;
     private String type;
 
+    public EarNumberModel() {
+    }
+
     public EarNumberModel(Integer id, Date date_created, String mini, String number, String type) {
         this.id = id;
         this.date_created = date_created;
