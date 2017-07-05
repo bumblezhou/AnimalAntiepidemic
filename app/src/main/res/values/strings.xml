@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">动物防疫离线录入系统</string>
+    <string name="title_home">首页</string>
+    <string name="title_eartag">耳标</string>
+    <string name="title_chipset">芯片</string>
+    <string name="title_antiepidemic">防疫</string>
+    <string name="title_about">关于</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_mobile">手机号</string>
+    <string name="prompt_email">邮箱</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">登录</string>
+    <string name="invalid_email">邮箱不正确！</string>
+    <string name="invalid_username">用户名(手机号)不正确！</string>
+    <string name="invalid_password">密码太短！</string>
+    <string name="incorrect_password">密码不正确！</string>
+    <string name="field_required">必填字段</string>
+</resources>

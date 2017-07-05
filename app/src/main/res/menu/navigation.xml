@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:checked="true"
+        android:title="@string/title_home"
+        android:icon="@drawable/home"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_eartag"
+        android:checked="false"
+        android:icon="@drawable/tag_multiple"
+        android:title="@string/title_eartag"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_chipset"
+        android:checked="false"
+        android:icon="@drawable/chip"
+        android:title="@string/title_chipset"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_antiepidemic"
+        android:checked="false"
+        android:icon="@drawable/medical_bag"
+        android:title="@string/title_antiepidemic"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_about"
+        android:checked="false"
+        android:icon="@drawable/account"
+        android:title="@string/title_about"
+        app:showAsAction="ifRoom" />
+
+</menu>
