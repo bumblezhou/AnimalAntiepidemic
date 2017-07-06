@@ -28,6 +28,7 @@ import qsh.com.animalantiepidemic.R;
 import qsh.com.animalantiepidemic.adapter.FarmerAdapter;
 import qsh.com.animalantiepidemic.databinding.FragmentHomeBinding;
 import qsh.com.animalantiepidemic.helper.LocalResourceHelper;
+import qsh.com.animalantiepidemic.helper.PinYinUtil;
 import qsh.com.animalantiepidemic.localstate.DataHolder;
 import qsh.com.animalantiepidemic.models.FarmerComparator;
 import qsh.com.animalantiepidemic.models.FarmerModel;
@@ -92,6 +93,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        Log.d("search", "search key:" + query);
         final List<FarmerModel> filteredModelList = filter(farmerModels, query);
         farmerAdapter.edit()
                 .replaceAll(filteredModelList)
@@ -100,21 +102,31 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     }
 
     private static List<FarmerModel> filter(List<FarmerModel> models, String query) {
-        final String lowerCaseQuery = query.toLowerCase();
+        final String lowerCaseQuery = query.trim().toLowerCase();
 
+        Log.d("search", "total search items:" + models.size());
         final List<FarmerModel> filteredModelList = new ArrayList<>();
         for (FarmerModel model : models) {
-            if (model.getAddress().contains(lowerCaseQuery) || model.getMobile().contains(lowerCaseQuery)
-                    || model.getHouseholder().contains(lowerCaseQuery)) {
+            if (model.getAddress().contains(lowerCaseQuery)
+                    || model.getMobile().contains(lowerCaseQuery)
+                    || model.getHouseholder().contains(lowerCaseQuery)
+                    || PinYinUtil.getFirstSpell(model.getAddress()).trim().toLowerCase().contains(query)
+                    || PinYinUtil.getFirstSpell(model.getHouseholder()).trim().toLowerCase().contains(query)) {
                 filteredModelList.add(model);
             }
         }
+        Log.d("search", "filted search items:" + filteredModelList.size());
         return filteredModelList;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        return false;
+        Log.d("search", "search key:" + newText);
+        final List<FarmerModel> filteredModelList = filter(farmerModels, newText);
+        farmerAdapter.edit()
+                .replaceAll(filteredModelList)
+                .commit();
+        return true;
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import qsh.com.animalantiepidemic.databinding.FragmentAboutBinding;
 import qsh.com.animalantiepidemic.databinding.FragmentChipsetBinding;
@@ -139,10 +140,19 @@ public class MainActivity extends AppCompatActivity {
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(int i = 0; i < bottomNavigationView.getMenu().size(); ++i){
+                    bottomNavigationView.getMenu().getItem(i).setChecked(false);
+                }
 
-        FragmentManager fragmentManager = this.getSupportFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.navigation_home);
-        searchView.setOnQueryTextListener((HomeFragment)fragment);
+                bottomNavigationView.getMenu().getItem(0).setChecked(true);
+                setTitle(R.string.title_home);
+                viewPager.setCurrentItem(0);
+            }
+        });
+        searchView.setOnQueryTextListener(homeFragment);
 
         return true;
     }

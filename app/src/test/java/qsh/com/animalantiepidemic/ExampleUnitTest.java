@@ -26,6 +26,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
 import cz.msebera.android.httpclient.util.EntityUtils;
+import qsh.com.animalantiepidemic.helper.PinYinUtil;
 import qsh.com.animalantiepidemic.models.AnimalTypeModel;
 import qsh.com.animalantiepidemic.models.EarNumberModel;
 import qsh.com.animalantiepidemic.models.FarmerModel;
@@ -38,6 +39,24 @@ import qsh.com.animalantiepidemic.security.DesHelper;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
+
+    @Test
+    public void test_pinyin(){
+        String chineseA = "2k3";
+        String chineseB = "";
+        String chineseC = "2中";
+        String chineseD = "中3ll0";
+        String chineseE = "中国";
+        String chineseF = null;
+
+        System.out.println(PinYinUtil.getFullSpell(chineseA));
+        System.out.println(PinYinUtil.getFullSpell(chineseB));
+        System.out.println(PinYinUtil.getFullSpell(chineseC));
+        System.out.println(PinYinUtil.getFullSpell(chineseD));
+        System.out.println(PinYinUtil.getFullSpell(chineseE));
+        System.out.println(PinYinUtil.getFullSpell(chineseF));
+
+    }
 
     @Test
     public void java_string_equal_test(){
