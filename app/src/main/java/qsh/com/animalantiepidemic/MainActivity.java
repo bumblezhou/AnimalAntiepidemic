@@ -1,11 +1,10 @@
 package qsh.com.animalantiepidemic;
 
-import android.animation.Animator;
-import android.databinding.DataBindingUtil;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -14,18 +13,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import qsh.com.animalantiepidemic.adapter.FarmerAdapter;
 import qsh.com.animalantiepidemic.databinding.FragmentAboutBinding;
 import qsh.com.animalantiepidemic.databinding.FragmentChipsetBinding;
 import qsh.com.animalantiepidemic.databinding.FragmentEartagBinding;
-import qsh.com.animalantiepidemic.databinding.FragmentHomeBinding;
 import qsh.com.animalantiepidemic.fragments.AboutFragment;
 import qsh.com.animalantiepidemic.fragments.AntiepidemicFragment;
 import qsh.com.animalantiepidemic.fragments.ChipsetFragment;
 import qsh.com.animalantiepidemic.fragments.EartagFragment;
 import qsh.com.animalantiepidemic.fragments.HomeFragment;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
 
@@ -40,15 +37,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     HomeFragment homeFragment;
 
     MenuItem prevMenuItem;
-
-    private FarmerAdapter farmerAdapter;
-
-    private FragmentHomeBinding fragmentHomeBinding;
-    private FragmentAboutBinding fragmentAboutBinding;
-    private FragmentChipsetBinding fragmentChipsetBinding;
-    private FragmentEartagBinding fragmentEartagBinding;
-
-    private Animator mAnimator;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -66,15 +54,15 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     return true;
                 case R.id.navigation_chipset:
                     setTitle(R.string.title_chipset);
-                    viewPager.setCurrentItem(2);
+                    viewPager.setCurrentItem(1);
                     return true;
                 case R.id.navigation_antiepidemic:
                     setTitle(R.string.title_antiepidemic);
-                    viewPager.setCurrentItem(3);
+                    viewPager.setCurrentItem(2);
                     return true;
                 case R.id.navigation_about:
                     setTitle(R.string.title_about);
-                    viewPager.setCurrentItem(4);
+                    viewPager.setCurrentItem(3);
                     return true;
             }
             return false;
@@ -130,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         //Initializing viewPager
@@ -150,18 +139,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(this);
+
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.navigation_home);
+        searchView.setOnQueryTextListener((HomeFragment)fragment);
 
         return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
     }
 }

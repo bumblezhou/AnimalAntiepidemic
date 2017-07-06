@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="16sp"
-            android:text="@{model.breed_type}" />
+            android:text="@{model.getBreedTypeName}" />
 
     </LinearLayout>
 

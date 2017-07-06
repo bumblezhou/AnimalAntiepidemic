@@ -32,11 +32,6 @@
         android:layout_alignParentTop="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <ProgressBar
-        android:id="@+id/toolbar_edit_progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
+
 
 </RelativeLayout>

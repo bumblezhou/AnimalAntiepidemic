@@ -299,15 +299,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            //this is where you should write your authentication code
-            // or call external service
-            // following try-catch just simulates network access
-
-            //try {
-            //    Thread.sleep(1000);
-            //} catch (InterruptedException e) {
-            //    return false;
-            //}
 
             UserDbHelper userDbHelper = new UserDbHelper(getBaseContext());
             SQLiteDatabase db = userDbHelper.getReadableDatabase();

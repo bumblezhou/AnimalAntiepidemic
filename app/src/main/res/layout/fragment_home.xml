@@ -10,33 +10,37 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:padding="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:textSize="18sp"
                 android:text="@string/farmer_field_title_householder" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="@string/farmer_field_title_mobile" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="@string/farmer_field_title_address" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="@string/farmer_field_title_breed_type" />
         </LinearLayout>
 
@@ -45,6 +49,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp" />
+
+        <ProgressBar
+            android:id="@+id/toolbar_edit_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

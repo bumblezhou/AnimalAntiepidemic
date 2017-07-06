@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import qsh.com.animalantiepidemic.R;
+import qsh.com.animalantiepidemic.helper.LocalResourceHelper;
 import qsh.com.animalantiepidemic.models.UserModel;
 
 /**
@@ -28,28 +29,14 @@ public class LocalUserCursorLoader extends CursorLoader {
         super(context);
     }
 
-    public String loadResourceFileContent(Context appContext, int resourceId) {
-        String result = null;
-        try {
-            InputStream is = appContext.getResources().openRawResource(resourceId);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            result = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return result;
-    }
+
 
     @Override
     public Cursor loadInBackground() {
 
         //本地文件存储转入本地数据库存储中
         Log.i("database", "从本地文件中获取用户数据");
-        String fileContent = loadResourceFileContent(getContext(), R.raw.users);
+        String fileContent = LocalResourceHelper.loadResourceFileContent(getContext(), R.raw.users);
         Gson gson = new Gson();
         UserModel[] userModels = gson.fromJson(fileContent, UserModel[].class);
         Log.i("database", "共获取用户数据条数:" + userModels.length);

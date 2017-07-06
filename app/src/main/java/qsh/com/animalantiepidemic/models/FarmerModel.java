@@ -66,6 +66,10 @@ public class FarmerModel  implements SortedListAdapter.ViewModel {
         this.breed_type = breed_type;
     }
 
+    public String getBreedTypeName(){
+        return breed_type == 0 ? "猪" : breed_type == 1 ? "牛羊" : "混合";
+    }
+
     @Override
     public <T> boolean isSameModelAs(@NonNull T item) {
         if (item instanceof FarmerModel) {
