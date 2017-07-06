@@ -46,13 +46,6 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10dp" />
 
-        <ProgressBar
-            android:id="@+id/toolbar_edit_progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
     </LinearLayout>
-
 
 </layout>

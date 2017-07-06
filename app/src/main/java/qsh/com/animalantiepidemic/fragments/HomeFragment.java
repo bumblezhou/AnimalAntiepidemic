@@ -27,7 +27,7 @@ public class HomeFragment extends Fragment {
         View view = binding.getRoot();
         //here data must be an instance of the class MarsDataProvider
         //binding.setUser(DataHolder.getCurrentUser());
-        
+
         return view;
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_home, container, false);

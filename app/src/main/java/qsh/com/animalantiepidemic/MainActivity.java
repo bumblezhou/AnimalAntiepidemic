@@ -16,6 +16,9 @@ import android.view.MenuItem;
 
 import qsh.com.animalantiepidemic.adapter.FarmerAdapter;
 import qsh.com.animalantiepidemic.databinding.FragmentAboutBinding;
+import qsh.com.animalantiepidemic.databinding.FragmentChipsetBinding;
+import qsh.com.animalantiepidemic.databinding.FragmentEartagBinding;
+import qsh.com.animalantiepidemic.databinding.FragmentHomeBinding;
 import qsh.com.animalantiepidemic.fragments.AboutFragment;
 import qsh.com.animalantiepidemic.fragments.AntiepidemicFragment;
 import qsh.com.animalantiepidemic.fragments.ChipsetFragment;
@@ -38,8 +41,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     MenuItem prevMenuItem;
 
-    private FarmerAdapter mAdapter;
-    //private FragmentHomeBinding mBinding;
+    private FarmerAdapter farmerAdapter;
+
+    private FragmentHomeBinding fragmentHomeBinding;
+    private FragmentAboutBinding fragmentAboutBinding;
+    private FragmentChipsetBinding fragmentChipsetBinding;
+    private FragmentEartagBinding fragmentEartagBinding;
+
     private Animator mAnimator;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
