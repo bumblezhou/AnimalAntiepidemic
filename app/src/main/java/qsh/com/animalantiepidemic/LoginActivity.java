@@ -358,8 +358,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
             if (success) {
                 //  login success and move to main Activity here.
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
                 setContentView(R.layout.activity_main);
 
                 DataHolder.setCurrentUser(validateUser);
