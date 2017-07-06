@@ -5,7 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -14,10 +14,10 @@ import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,19 +27,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import qsh.com.animalantiepidemic.contentprovider.ListLoader;
+import qsh.com.animalantiepidemic.contentprovider.LocalUserCursorLoader;
 import qsh.com.animalantiepidemic.localstate.DataHolder;
-import qsh.com.animalantiepidemic.models.AnimalTypeModel;
 import qsh.com.animalantiepidemic.models.UserComparator;
 import qsh.com.animalantiepidemic.models.UserModel;
 import qsh.com.animalantiepidemic.persistent.UserDbHelper;
@@ -49,7 +44,7 @@ import qsh.com.animalantiepidemic.security.DesHelper;
 /**
  * Android login screen Activity
  */
-public class LoginActivity extends Activity implements LoaderCallbacks<List<UserModel>> {
+public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 //public class LoginActivity extends Activity {
 
     //private static final String DUMMY_CREDENTIALS = "13565459883:iloveyou@1014";
@@ -60,6 +55,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<List<User
     private AutoCompleteTextView usernameTextView;
     private EditText passwordTextView;
     private TextView signUpTextView;
+    private UserModel validateUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +66,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<List<User
 
         usernameTextView = (AutoCompleteTextView) findViewById(R.id.username);
         passwordTextView = (EditText) findViewById(R.id.password);
+
+        usernameTextView.setFocusable(true);
         passwordTextView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                Log.d("debug:", "Editor Action, id = " + Integer.toString(id));
                 if (id == EditorInfo.IME_NULL) {
                     initLogin();
                     return true;
@@ -101,11 +100,19 @@ public class LoginActivity extends Activity implements LoaderCallbacks<List<User
             @Override
             public void onClick(View v) {
                 Log.i("LoginActivity", "Sign Up Activity activated.");
+
+                Toast toast = Toast.makeText(getBaseContext(), "系统提示", Toast.LENGTH_SHORT);
+                toast.setText("暂未开放注册");
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                //other setters
+                toast.show();
+
                 // this is where you should start the signup Activity
                 // LoginActivity.this.startActivity(new Intent(LoginActivity.this, SignupActivity.class));
             }
         });
     }
+
     private void loadDataToSqlite() {
         getLoaderManager().initLoader(0, null, this);
     }
@@ -198,104 +205,84 @@ public class LoginActivity extends Activity implements LoaderCallbacks<List<User
 
 
     @Override
-    public Loader<List<UserModel>> onCreateLoader(int i, Bundle bundle) {
-//        return new CursorLoader(this,
-//                // Retrieve data rows for the device user's 'profile' contact.
-//                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI, ContactsContract.Contacts.Data.CONTENT_DIRECTORY),
-//
-//                //
-//                ProfileQuery.PROJECTION,
-//
-//                // Select only phone number.
-//                ContactsContract.Contacts.Data.MIMETYPE + " = ?", new String[]{ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE},
-//
-//                // Show primary phone number first. Note that there won't be
-//                // a primary phone number if the user hasn't specified one.
-//                ContactsContract.Contacts.DISPLAY_NAME + " DESC");
-        return new ListLoader<UserModel>(this) {
-            @Override
-            protected List<UserModel> getData() {
-                String fileContent = loadResourceFileContent(getContext(), R.raw.users);
-                Gson gson = new Gson();
-                UserModel[] userModels = gson.fromJson(fileContent, UserModel[].class);
-                return Arrays.asList(userModels);
-            }
-        };
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        //通过自定义的CusorLoader,实现从本地文件中加载用户数据到Cursor中。
+        return new LocalUserCursorLoader(this);
     }
 
     @Override
-    public void onLoadFinished(Loader<List<UserModel>> cursorLoader, List<UserModel> cursor) {
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         List<String> phonese = new ArrayList<String>();
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            phonese.add(cursor.getString(ProfileQuery.PHONE_NUMBER));
-//            cursor.moveToNext();
-//        }
+        List<UserModel> userModels = new ArrayList<>();
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            phonese.add(cursor.getString(cursor.getColumnIndex("name")));
+
+            UserModel tempUser = UserModel.parseUser(cursor);
+            userModels.add(tempUser);
+            //Log.d("debug", "MatrixCursor中加载的用户数据：" + tempUser.getId().toString() + "," + tempUser.getName() + "," + tempUser.getFullName() + "," + tempUser.getAddress() + "," + tempUser.getPassword());
+            cursor.moveToNext();
+        }
+        Log.d("debug", "phoneNumbers length = " + phonese.size());
         addPhoneNumbersToAutoComplete(phonese);
 
         UserDbHelper userDbHelper = new UserDbHelper(this);
 
         //默认按id从小到大排序
-        Collections.sort(cursor, new UserComparator());
+        Log.i("database", "按id从小到大排序用户数据");
+        Collections.sort(userModels, new UserComparator());
 
-        SQLiteDatabase db = userDbHelper.getWritableDatabase();
+        Log.i("database", "找一下库中有没有JSON文件中最大ID的记录");
+        SQLiteDatabase db = userDbHelper.getReadableDatabase();
         //找一下库中有没有JSON文件中最大ID的记录
-        Cursor queryCursor = db.query(userDbHelper.TABLE_NAME,
-                new String[]{"id", "name", "fullName", "address", "password"},
+        Cursor queryCursor = db.query(UserModel.TABLE_NAME, UserModel.COLUMN_NAMES,
                 "id = ?",
-                new String[] { cursor.get(cursor.size() - 1).getId().toString() },
+                new String[] { userModels.get(userModels.size() - 1).getId().toString() },
                 null, null, null);
+        Integer recordCount = queryCursor.getCount();
+        db.close();
 
         //如果有，则别同步了
-        if (queryCursor.getCount() > 0) {
-
+        if (recordCount > 0) {
+            Log.i("database", "如果有，则别同步了");
+            Log.i("database", "关闭数据库连接");
         } else {
-            db.beginTransaction();
-            for(UserModel user : cursor){
-                db.execSQL("insert into " + userDbHelper.TABLE_NAME + " (id, name, fullname, address, password) values (" + user.getId() + ", '" + user.getName() + "', '" + user.getFullName() + "', '" + user.getAddress() + "', '" + user.getPassword() + "')");
+            Log.i("database", "如果没有JSON文件中最大ID的记录");
+            Log.i("database", "开始同步用户数据到数据库中");
+            db = userDbHelper.getWritableDatabase();
+            try {
+                //db.beginTransaction();
+                for(UserModel user : userModels){
+                    //String sql = "insert into " + UserModel.TABLE_NAME + " (" + UserModel.DATABASE_COLUMN_NAMES + ") values (" + user.getId() + ", '" + user.getName() + "', '" + user.getFullName() + "', '" + user.getAddress() + "', '" + user.getPassword() + "')";
+                    //Log.d("database", "INSERT SQL:" + sql);
+                    //db.execSQL(sql);
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put("id", user.getId());
+                    contentValues.put("name", user.getName());
+                    contentValues.put("fullName", user.getFullName());
+                    contentValues.put("address", user.getAddress());
+                    contentValues.put("password", user.getPassword());
+                    db.insert(UserModel.TABLE_NAME, null, contentValues);
+                }
+                //db.endTransaction();
+                Log.i("database", "完成同步用户数据到数据库，关闭数据库连接");
+                db.close();
+            } catch (Exception e) {
+                Log.d("debug", "同步数据库失败，错误信息:" + e.getMessage());
             }
-            db.setTransactionSuccessful();
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<List<UserModel>> cursorLoader) {
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
-    }
-
-    public String loadResourceFileContent(Context appContext, int resourceId) {
-        String result = null;
-        try {
-            InputStream is = appContext.getResources().openRawResource(resourceId);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            result = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return result;
     }
 
     private void addPhoneNumbersToAutoComplete(List<String> phoneNumberCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(LoginActivity.this, android.R.layout.simple_dropdown_item_1line, phoneNumberCollection);
-
         usernameTextView.setAdapter(adapter);
     }
-
-
-//    private interface ProfileQuery {
-//        String[] PROJECTION = {
-//                ContactsContract.CommonDataKinds.Phone.NUMBER,
-//                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-//        };
-//
-//        int PHONE_NUMBER = 0;
-//        int CONTACT_DISPLAY_NAME = 1;
-//    }
 
     /**
      * Async Login Task to authenticate
@@ -315,34 +302,49 @@ public class LoginActivity extends Activity implements LoaderCallbacks<List<User
             //this is where you should write your authentication code
             // or call external service
             // following try-catch just simulates network access
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
 
-            //using a local dummy credentials store to authenticate
-            //String[] pieces = DUMMY_CREDENTIALS.split(":");
+            //try {
+            //    Thread.sleep(1000);
+            //} catch (InterruptedException e) {
+            //    return false;
+            //}
+
             UserDbHelper userDbHelper = new UserDbHelper(getBaseContext());
-            SQLiteDatabase db = userDbHelper.getWritableDatabase();
+            SQLiteDatabase db = userDbHelper.getReadableDatabase();
+            //调试一下看库中是否有数据
+            //Cursor testCursor = db.query(UserModel.TABLE_NAME, UserModel.COLUMN_NAMES,
+            //        null, null, null, null, null);
+            //Log.d("database", "数据库中的记录条数：" + testCursor.getCount());
+            //db.close();
 
-            // select * from Orders where CustomName = 'Bor'
-            Cursor cursor = db.query(UserDbHelper.TABLE_NAME,
-                    new String[]{"id", "name", "fullName", "address", "password"},
+            Log.i("login", "查找数据库中是否有用户名为'" + usernameStr + "'的记录");
+            db = userDbHelper.getReadableDatabase();
+            Cursor cursor = db.query(UserModel.TABLE_NAME, UserModel.COLUMN_NAMES,
                     "name = ?",
                     new String[] {usernameStr},
                     null, null, null);
-
-            if (cursor.getCount() > 0) {
+            Integer recordCount = cursor.getCount();
+            if (recordCount > 0) {
                 cursor.moveToFirst();
-                UserModel firstQueriedUser = userDbHelper.parseUser(cursor);
-                if(firstQueriedUser.getPassword().equals(DesHelper.encrypt(passwordStr, getResources().getString(R.string.security_key)))){
+                validateUser = UserModel.parseUser(cursor);
+                Log.i("login", "如果有，先获取记录并关联数据库连接");
+                db.close();
+
+                Log.i("login", "再判断密码是否正确");
+                String databasePassword = validateUser.getPassword();
+                Log.i("login", "库中用户密码：" + databasePassword);
+                String encryptedPassword = DesHelper.encrypt(passwordStr, getResources().getString(R.string.security_key));
+                Log.i("login", "加密过后的用户输入密码：" + encryptedPassword);
+                if(databasePassword.equals(encryptedPassword)){
+                    Log.i("login", "密码正确,返回true");
                     return true;
                 }
-                return false;
             } else {
-                return false;
+                Log.i("login", "如果没有，则关联数据库连接");
+                db.close();
             }
+            Log.i("login", "密码错误,返回false");
+            return false;
         }
 
         @Override
@@ -357,7 +359,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<List<User
                 startActivity(i);
                 setContentView(R.layout.activity_main);
 
-                DataHolder.setCurrentUser(new UserModel(1, usernameStr, "", "", passwordStr));
+                DataHolder.setCurrentUser(validateUser);
             } else {
                 // login failure
                 passwordTextView.setError(getString(R.string.incorrect_password));
