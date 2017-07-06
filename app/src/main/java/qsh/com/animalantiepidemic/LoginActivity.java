@@ -335,16 +335,19 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 Log.i("login", "库中用户密码：" + databasePassword);
                 String encryptedPassword = DesHelper.encrypt(passwordStr, getResources().getString(R.string.security_key));
                 Log.i("login", "加密过后的用户输入密码：" + encryptedPassword);
-                if(databasePassword.equals(encryptedPassword)){
-                    Log.i("login", "密码正确,返回true");
+                if(databasePassword.trim().equals(encryptedPassword.trim())) {
+                    Log.i("login", "1.密码正确,返回true");
                     return true;
+                } else {
+                    Log.i("login", "2.密码错误,返回false");
+                    return false;
                 }
             } else {
-                Log.i("login", "如果没有，则关联数据库连接");
+                Log.i("login", "3.如果没有，则关联数据库连接");
                 db.close();
+                Log.i("login", "4.密码错误,返回false");
+                return false;
             }
-            Log.i("login", "密码错误,返回false");
-            return false;
         }
 
         @Override

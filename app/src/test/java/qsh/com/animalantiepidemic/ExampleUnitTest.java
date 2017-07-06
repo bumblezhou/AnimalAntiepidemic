@@ -40,6 +40,15 @@ import qsh.com.animalantiepidemic.security.DesHelper;
 public class ExampleUnitTest {
 
     @Test
+    public void java_string_equal_test(){
+        String a = "knI+p5+L2VQ=";
+        String b = "knI+p5+L2VQ=";
+
+        System.out.println(a == b);
+        System.out.println(a.equals(b));
+    }
+
+    @Test
     public void load_user_data_from_remote_server_and_store_as_local_json_file() {
         final String url = "http://www.klmyqsh.com/wx/api/PlatformUser/LoadAllUsers";
 
