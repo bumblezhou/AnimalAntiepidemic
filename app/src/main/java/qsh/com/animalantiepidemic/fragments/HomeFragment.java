@@ -4,11 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -68,8 +70,20 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         farmerAdapter = new FarmerAdapter(getActivity(), new FarmerComparator(), new FarmerAdapter.Listener() {
             @Override
             public void onFarmerModelClicked(FarmerModel model) {
-                final String message = "点击了畜主(" + model.getHouseholder() + "-" + model.getMobile() + "-" + model.getAddress() +")!";
-                Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+                //final String message = "点击了畜主(" + model.getHouseholder() + "-" + model.getMobile() + "-" + model.getAddress() +")!";
+                //Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+                String operations[] = new String[] {"挂耳标", "打芯片", "做防疫"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("选择操作：");
+                builder.setItems(operations, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                        final String message = "点击了第" + which + "项!";
+                        Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+                builder.show();
             }
         });
         farmerAdapter.addCallback(this);
