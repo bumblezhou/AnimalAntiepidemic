@@ -1,28 +1,33 @@
 package qsh.com.animalantiepidemic;
 
+import android.animation.Animator;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import qsh.com.animalantiepidemic.adapter.FarmerAdapter;
+import qsh.com.animalantiepidemic.databinding.FragmentAboutBinding;
 import qsh.com.animalantiepidemic.fragments.AboutFragment;
 import qsh.com.animalantiepidemic.fragments.AntiepidemicFragment;
 import qsh.com.animalantiepidemic.fragments.ChipsetFragment;
 import qsh.com.animalantiepidemic.fragments.EartagFragment;
 import qsh.com.animalantiepidemic.fragments.HomeFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     BottomNavigationView bottomNavigationView;
 
     //This is our viewPager
     private ViewPager viewPager;
-
 
     //Fragments
     AboutFragment aboutFragment;
@@ -31,8 +36,11 @@ public class MainActivity extends AppCompatActivity {
     EartagFragment eartagFragment;
     HomeFragment homeFragment;
 
-
     MenuItem prevMenuItem;
+
+    private FarmerAdapter mAdapter;
+    //private FragmentHomeBinding mBinding;
+    private Animator mAnimator;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -127,4 +135,25 @@ public class MainActivity extends AppCompatActivity {
         setupViewPager(viewPager);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
 }

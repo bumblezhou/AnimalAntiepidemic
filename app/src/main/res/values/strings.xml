@@ -21,4 +21,14 @@
 
     <!-- String related to security-->
     <string name="security_key">273ece6f97dd844d</string>
+
+    <!-- String related to farmer data binding-->
+    <string name="action_search">搜索</string>
+
+    <!-- String related to farmer data binding-->
+    <string name="farmer_field_title_householder">畜主</string>
+    <string name="farmer_field_title_mobile">手机</string>
+    <string name="farmer_field_title_address">地址</string>
+    <string name="farmer_field_title_breed_type">类型</string>
+
 </resources>

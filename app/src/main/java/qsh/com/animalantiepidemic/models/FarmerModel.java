@@ -1,10 +1,14 @@
 package qsh.com.animalantiepidemic.models;
 
+import android.support.annotation.NonNull;
+
+import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
+
 /**
  * Created by JackZhou on 04/07/2017.
  */
 
-public class FarmerModel {
+public class FarmerModel  implements SortedListAdapter.ViewModel {
     private Integer id;
     private String householder;
     private String mobile;
@@ -60,5 +64,25 @@ public class FarmerModel {
 
     public void setBreed_type(Integer breed_type) {
         this.breed_type = breed_type;
+    }
+
+    @Override
+    public <T> boolean isSameModelAs(@NonNull T item) {
+        if (item instanceof FarmerModel) {
+            final FarmerModel farmerModel = (FarmerModel) item;
+            return farmerModel.getId() == getId();
+        }
+        return false;
+    }
+
+    @Override
+    public <T> boolean isContentTheSameAs(@NonNull T item) {
+        if (item instanceof FarmerModel) {
+            final FarmerModel farmerModel = (FarmerModel) item;
+            return farmerModel.getAddress().equals(getAddress())
+                    && farmerModel.getHouseholder().equals(getHouseholder())
+                    && farmerModel.getMobile().equals(getMobile());
+        }
+        return false;
     }
 }
