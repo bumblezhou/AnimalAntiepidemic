@@ -3,8 +3,11 @@ package qsh.com.animalantiepidemic.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -20,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 import com.google.gson.Gson;
@@ -37,8 +41,13 @@ import qsh.com.animalantiepidemic.localstate.DataHolder;
 import qsh.com.animalantiepidemic.models.FarmerComparator;
 import qsh.com.animalantiepidemic.models.FarmerModel;
 import qsh.com.animalantiepidemic.models.UserModel;
+import qsh.com.animalantiepidemic.persistent.FarmerDbHelper;
 
+import static qsh.com.animalantiepidemic.R.color.colorAccent;
+import static qsh.com.animalantiepidemic.R.color.colorBackground;
+import static qsh.com.animalantiepidemic.R.color.colorPrimary;
 import static qsh.com.animalantiepidemic.R.color.colorPrimaryDark;
+import static qsh.com.animalantiepidemic.R.color.colorTextPrimary;
 
 /**
  * Created by JackZhou on 05/07/2017.
@@ -210,7 +219,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     public void openAddFarmerDialog(){
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(getActivity());
-        View promptsView = li.inflate(R.layout.create_farmer_dialog, null);
+        final View promptsView = li.inflate(R.layout.create_farmer_dialog, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
 
@@ -223,8 +232,77 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // get user input and set it to result
-                                // edit text
-                                //result.setText(userInput.getText());
+                                Spinner spinner = (Spinner) promptsView.findViewById(R.id.txt_farmer_breed_type);
+                                String breed_type = spinner.getSelectedItem().toString();
+
+                                TextView txtViewHouseholder = (TextView) promptsView.findViewById(R.id.txt_farmer_householder);
+                                String householder = txtViewHouseholder.getText().toString();
+
+                                TextView txtViewAddress = (TextView) promptsView.findViewById(R.id.txt_farmer_householder);
+                                String address = txtViewAddress.getText().toString();
+
+                                TextView txtViewMobile = (TextView) promptsView.findViewById(R.id.txt_farmer_householder);
+                                String mobile = txtViewMobile.getText().toString();
+
+                                //final String message = "准备提交畜主信息(" + householder + "-" + address + "-" + mobile + "-" + breed_type + ")!";
+                                //Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+
+                                SQLiteDatabase db = new FarmerDbHelper(getActivity()).getWritableDatabase();
+                                //找一下库中有没有JSON文件中最大ID的记录
+                                Cursor queryCursor = db.query(FarmerModel.TABLE_NAME, FarmerModel.COLUMN_NAMES,
+                                        "householder = ? AND address = ? AND mobile = ?",
+                                        new String[] { householder, address, mobile },
+                                        null, null, null);
+                                Integer recordCount = queryCursor.getCount();
+                                db.close();
+
+                                //如果有，则别同步了
+                                if (recordCount > 0) {
+                                    final String message = "库中已存在畜主(" + householder + "-" + address + "-" + mobile + "-" + breed_type + "),请修改畜主名称、地址、电话中的任意一项重新提交!";
+                                    Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Log.i("database", "如果没有JSON文件中最大ID的记录");
+                                    Log.i("database", "开始同步用户数据到数据库中");
+                                    db = new FarmerDbHelper(getActivity()).getWritableDatabase();
+                                    try {
+                                        ContentValues contentValues = new ContentValues();
+                                        //contentValues.put("id", user.getId());
+                                        contentValues.put("householder", householder);
+                                        contentValues.put("mobile", mobile);
+                                        contentValues.put("address", address);
+                                        contentValues.put("breed_type", breed_type == "猪" ? 0 : breed_type == "牛羊" ? 1 : 2);
+                                        db.insert(FarmerModel.TABLE_NAME, null, contentValues);
+
+                                        final String message = "添加畜主(" + householder + "-" + address + "-" + mobile + "-" + breed_type + ")成功!";
+                                        Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+                                        db.close();
+
+                                        //提交成攻，刷新界面上的数据
+                                        farmerModels = new ArrayList<>();
+                                        db = new FarmerDbHelper(getActivity()).getReadableDatabase();
+                                        queryCursor = db.query(FarmerModel.TABLE_NAME, FarmerModel.COLUMN_NAMES,
+                                                null,
+                                                null,
+                                                null, null, null);
+                                        farmerModels.clear();
+                                        while (!queryCursor.isAfterLast()){
+                                            FarmerModel tempModel = new FarmerModel(
+                                                queryCursor.getInt(queryCursor.getColumnIndex("id")),
+                                                queryCursor.getString(queryCursor.getColumnIndex("householder")),
+                                                queryCursor.getString(queryCursor.getColumnIndex("mobile")),
+                                                queryCursor.getString(queryCursor.getColumnIndex("address")),
+                                                queryCursor.getInt(queryCursor.getColumnIndex("breed_type")));
+                                            farmerModels.add(tempModel);
+                                        }
+                                        farmerAdapter.edit()
+                                            .replaceAll(farmerModels)
+                                            .commit();
+
+                                    } catch (Exception e) {
+                                        Log.d("debug", "同步数据库失败，错误信息:" + e.getMessage());
+                                        db.close();
+                                    }
+                                }
                             }
                         })
                 .setNegativeButton("取消",

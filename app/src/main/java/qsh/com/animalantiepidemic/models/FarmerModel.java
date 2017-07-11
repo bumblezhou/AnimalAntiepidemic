@@ -89,4 +89,8 @@ public class FarmerModel  implements SortedListAdapter.ViewModel {
         }
         return false;
     }
+
+    public static String TABLE_NAME = "Farmers";
+    public static String[] COLUMN_NAMES = new String[] {"id", "householder", "mobile", "address", "breed_type"};
+    public static String DATABASE_COLUMN_NAMES = "id, householder, mobile, address, breed_type";
 }
