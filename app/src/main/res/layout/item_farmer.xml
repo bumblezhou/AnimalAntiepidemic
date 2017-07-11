@@ -23,41 +23,44 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:focusableInTouchMode="true"
-        android:focusable="true"
         android:gravity="center_vertical"
         android:onClick="@{view -> listener.onFarmerModelClicked(model)}">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:padding="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:textSize="16sp"
-            android:text="@{model.householder}" />
+            android:text="@{model.householder}"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:textSize="16sp"
-            android:text="@{model.mobile}" />
+            android:text="@{model.mobile}"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:textSize="16sp"
-            android:text="@{model.address}" />
+            android:text="@{model.address}"
+            android:textSize="16sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:textSize="16sp"
-            android:text="@{model.getBreedTypeName}" />
+            android:text="@{model.getBreedTypeName}"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

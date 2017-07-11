@@ -179,8 +179,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_edit_farmer) {
-            Toast.makeText(getApplicationContext(), "你点击了编辑畜主！", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "你点击了编辑畜主！", Toast.LENGTH_SHORT).show();
             backToHomepage();
+            this.homeFragment.openEidtFarmerDialog();
             return true;
         }
 

@@ -3,59 +3,72 @@
     tools:context="qsh.com.animalantiepidemic.fragments.HomeFragment">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:background="@drawable/background_color"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/background_color"
+        android:orientation="vertical">
+
         <LinearLayout
-            android:background="@drawable/border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:padding="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:textSize="18sp"
-                android:text="@string/farmer_field_title_householder" />
+                android:textStyle="bold"
+                android:text="@string/farmer_field_title_householder"
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:textSize="18sp"
-                android:text="@string/farmer_field_title_mobile" />
+                android:textStyle="bold"
+                android:text="@string/farmer_field_title_mobile"
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:textSize="18sp"
-                android:text="@string/farmer_field_title_address" />
+                android:textStyle="bold"
+                android:text="@string/farmer_field_title_address"
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:textSize="18sp"
-                android:text="@string/farmer_field_title_breed_type" />
+                android:textStyle="bold"
+                android:text="@string/farmer_field_title_breed_type"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/farmer_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp" />
 
         <ProgressBar
             android:id="@+id/toolbar_edit_progress_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 
