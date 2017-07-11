@@ -27,8 +27,19 @@
 
     <!-- String related to farmer data binding-->
     <string name="farmer_field_title_householder">畜主</string>
+    <string name="farmer_field_hint_householder">请输入畜主...</string>
     <string name="farmer_field_title_mobile">手机</string>
+    <string name="farmer_field_hint_mobile">请输入手机号...</string>
     <string name="farmer_field_title_address">地址</string>
+    <string name="farmer_field_hint_address">请输入畜主地址...</string>
     <string name="farmer_field_title_breed_type">类型</string>
+    <string name="farmer_field_hint_breed_type">请输入饲养...</string>
+    <string name="farmer_edit_action_title">编辑</string>
+    <string name="farmer_add_action_title">添加</string>
 
+    <string-array name="breed_types">
+        <item>猪</item>
+        <item>牛羊</item>
+        <item>混合</item>
+    </string-array>
 </resources>

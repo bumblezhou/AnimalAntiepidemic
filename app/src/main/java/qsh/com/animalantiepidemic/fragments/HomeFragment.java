@@ -36,6 +36,8 @@ import qsh.com.animalantiepidemic.models.FarmerComparator;
 import qsh.com.animalantiepidemic.models.FarmerModel;
 import qsh.com.animalantiepidemic.models.UserModel;
 
+import static qsh.com.animalantiepidemic.R.color.colorPrimaryDark;
+
 /**
  * Created by JackZhou on 05/07/2017.
  */
@@ -74,7 +76,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                 //Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
                 String operations[] = new String[] {"挂耳标", "打芯片", "做防疫"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("选择操作：");
+                //builder.setTitle("选择操作：");
                 builder.setItems(operations, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -83,7 +85,17 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                         Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
                     }
                 });
-                builder.show();
+                final AlertDialog alertDialog = builder.create();
+                alertDialog.setTitle("选择操作：");
+                alertDialog.setIcon(R.mipmap.ic_launcher_round);
+                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(colorPrimaryDark));
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(colorPrimaryDark));
+                    }
+                });
+                alertDialog.show();
             }
         });
         farmerAdapter.addCallback(this);

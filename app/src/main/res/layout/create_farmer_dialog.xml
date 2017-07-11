@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!--android:background="@drawable/background_color"-->
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/label_farmer_householder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="120dp"
+                android:elevation="1dp"
+                android:padding="10dp"
+                android:text="@string/farmer_field_title_householder" />
+
+            <EditText
+                android:id="@+id/txt_farmer_householder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/farmer_field_hint_householder"
+                android:inputType="textPersonName"
+                android:padding="10dp"
+                android:text="" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/label_farmer_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="120dp"
+                android:elevation="1dp"
+                android:padding="10dp"
+                android:text="@string/farmer_field_title_address" />
+
+            <EditText
+                android:id="@+id/txt_farmer_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/farmer_field_hint_address"
+                android:inputType="text"
+                android:padding="10dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/label_farmer_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="120dp"
+                android:elevation="1dp"
+                android:padding="10dp"
+                android:text="@string/farmer_field_title_mobile" />
+
+            <EditText
+                android:id="@+id/txt_farmer_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/farmer_field_hint_mobile"
+                android:inputType="textPersonName"
+                android:padding="10dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/label_farmer_breed_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="120dp"
+                android:elevation="1dp"
+                android:padding="10dp"
+                android:text="@string/farmer_field_title_breed_type" />
+
+            <Spinner
+                android:id="@+id/txt_farmer_breed_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/farmer_field_hint_breed_type"
+                android:inputType="textPersonName"
+                android:padding="10dp" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
