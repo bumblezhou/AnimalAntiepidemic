@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_user) {
             //Toast.makeText(getApplicationContext(), "你点击了添加畜主！", Toast.LENGTH_SHORT).show();
-            openAddFarmerDialog();
+            this.homeFragment.openAddFarmerDialog();
             return true;
         }
 
@@ -185,61 +185,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void openAddFarmerDialog(){
-        // get prompts.xml view
-        LayoutInflater li = LayoutInflater.from(this);
-        View promptsView = li.inflate(R.layout.create_farmer_dialog, null);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
-        // set prompts.xml to alertdialog builder
-        alertDialogBuilder.setView(promptsView);
-        // set dialog message
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("提交",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                // get user input and set it to result
-                                // edit text
-                                //result.setText(userInput.getText());
-                            }
-                        })
-                .setNegativeButton("取消",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        // create alert dialog
-        final AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.setTitle("添加畜主");
-        alertDialog.setIcon(R.mipmap.ic_launcher_round);
-
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(colorPrimaryDark));
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(colorPrimaryDark));
-            }
-        });
-
-        Spinner spinner = (Spinner) promptsView.findViewById(R.id.txt_farmer_breed_type);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.breed_types, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        if(spinner == null){
-            Log.d("system", "未能找到对话框中的spinner widget.");
-        }
-        if(adapter == null){
-            Log.d("system", "未能成功创建spinner适配器.");
-        }
-        // Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-
-        // show it
-        alertDialog.show();
-    }
 }
