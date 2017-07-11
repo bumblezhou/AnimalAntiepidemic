@@ -18,6 +18,7 @@
     <string name="incorrect_password">密码不正确！</string>
     <string name="field_required">必填字段</string>
     <string name="action_logout">退出</string>
+    <string name="action_sync">同步</string>
 
     <!-- String related to security-->
     <string name="security_key">273ece6f97dd844d</string>

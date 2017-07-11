@@ -64,15 +64,15 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_chipset:
                     setTitle(R.string.title_chipset);
-                    viewPager.setCurrentItem(1);
+                    viewPager.setCurrentItem(2);
                     return true;
                 case R.id.navigation_antiepidemic:
                     setTitle(R.string.title_antiepidemic);
-                    viewPager.setCurrentItem(2);
+                    viewPager.setCurrentItem(3);
                     return true;
                 case R.id.navigation_about:
                     setTitle(R.string.title_about);
-                    viewPager.setCurrentItem(3);
+                    viewPager.setCurrentItem(4);
                     return true;
             }
             return false;
@@ -123,6 +123,12 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
+    private void backToHomepage(){
+        bottomNavigationView.getMenu().getItem(0).setChecked(true);
+        setTitle(R.string.title_home);
+        viewPager.setCurrentItem(0);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,13 +155,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnSearchClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < bottomNavigationView.getMenu().size(); ++i) {
-                    bottomNavigationView.getMenu().getItem(i).setChecked(false);
-                }
-
-                bottomNavigationView.getMenu().getItem(0).setChecked(true);
-                setTitle(R.string.title_home);
-                viewPager.setCurrentItem(0);
+                backToHomepage();
             }
         });
         searchView.setOnQueryTextListener(homeFragment);
@@ -171,14 +171,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_add_user) {
+        if (id == R.id.action_add_farmer) {
             //Toast.makeText(getApplicationContext(), "你点击了添加畜主！", Toast.LENGTH_SHORT).show();
+            backToHomepage();
             this.homeFragment.openAddFarmerDialog();
             return true;
         }
 
-        if (id == R.id.action_edit_user) {
+        if (id == R.id.action_edit_farmer) {
             Toast.makeText(getApplicationContext(), "你点击了编辑畜主！", Toast.LENGTH_SHORT).show();
+            backToHomepage();
             return true;
         }
 
