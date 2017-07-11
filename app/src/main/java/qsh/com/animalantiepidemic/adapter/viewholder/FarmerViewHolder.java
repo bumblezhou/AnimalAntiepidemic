@@ -9,22 +9,24 @@ import qsh.com.animalantiepidemic.databinding.ItemFarmerBinding;
 import qsh.com.animalantiepidemic.models.FarmerModel;
 
 /**
- * Created by JackZhou on 06/07/2017.
+ * Created by JackZhou on 11/07/2017.
  */
 
 public class FarmerViewHolder extends SortedListAdapter.ViewHolder<FarmerModel> {
 
     private final ItemFarmerBinding mBinding;
 
-    public FarmerViewHolder(ItemFarmerBinding binding, FarmerAdapter.Listener listener) {
+    public FarmerViewHolder(final ItemFarmerBinding binding, FarmerAdapter.Listener listener) {
         super(binding.getRoot());
-        binding.setListener(listener);
+
+        //binding.setListener(listener);
 
         mBinding = binding;
     }
 
     @Override
     protected void performBind(@NonNull FarmerModel item) {
+
         mBinding.setModel(item);
     }
 }

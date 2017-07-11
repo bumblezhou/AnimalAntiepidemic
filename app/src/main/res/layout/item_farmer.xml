@@ -3,9 +3,12 @@
 
     <data>
 
+        <!--<variable-->
+            <!--name="listener"-->
+            <!--type="qsh.com.animalantiepidemic.adapter.FarmerAdapter.Listener"/>-->
         <variable
             name="listener"
-            type="qsh.com.animalantiepidemic.adapter.FarmerAdapter.Listener"/>
+            type="qsh.com.animalantiepidemic.adapter.FarmerRecycleViewAdapter.Listener"/>
 
         <variable
             name="model"
@@ -13,11 +16,15 @@
 
     </data>
 
+    <!--android:background="@drawable/border"-->
+    <!--android:background="@drawable/selector_row"-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
         android:gravity="center_vertical"
         android:onClick="@{view -> listener.onFarmerModelClicked(model)}">
 
@@ -43,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="16sp"
-            android:text="@{model.mobile}" />
+            android:text="@{model.address}" />
 
         <TextView
             android:layout_width="wrap_content"
