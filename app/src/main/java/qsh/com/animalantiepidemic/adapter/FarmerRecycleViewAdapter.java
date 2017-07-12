@@ -50,8 +50,7 @@ public class FarmerRecycleViewAdapter extends RecyclerView.Adapter<FarmerRecycle
 
     @Override
     public void onBindViewHolder(FarmerRecycleViewHolder holder, final int position) {
-        FarmerModel farmerModel = mFarmerModels.get(position);
-        holder.performBind(farmerModel);
+
 
         if(selectedPosition == position){
             // Here I am just highlighting the background
@@ -72,6 +71,9 @@ public class FarmerRecycleViewAdapter extends RecyclerView.Adapter<FarmerRecycle
                 // Do your another stuff for your onClick
             }
         });
+
+        FarmerModel farmerModel = mFarmerModels.get(position);
+        holder.performBind(farmerModel);
     }
 
     @Override

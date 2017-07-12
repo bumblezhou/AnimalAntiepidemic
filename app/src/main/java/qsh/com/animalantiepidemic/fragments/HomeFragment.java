@@ -403,11 +403,14 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     }
 
     public void openEidtFarmerDialog(){
-        if(selectedFarmerModel == null){
+
+        if(farmerRecycleViewAdapter.selectedPosition < 0){
             final String message = "请先选择畜主后，再进行编辑操作!";
             Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
             return;
         }
+
+        selectedFarmerModel = farmerModels.get(farmerRecycleViewAdapter.selectedPosition);
 
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(getActivity());
@@ -535,9 +538,9 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public void onFarmerModelClicked(FarmerModel model) {
-        String message = "选中畜主：(" + model.getHouseholder() + "-" + model.getAddress() + "-" + model.getMobile() + "-" + model.getBreedTypeName() + ")";
-        Log.i("interface", message);
-        Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
-        selectedFarmerModel = model;
+//        String message = "选中畜主：(" + model.getHouseholder() + "-" + model.getAddress() + "-" + model.getMobile() + "-" + model.getBreedTypeName() + ")";
+//        Log.i("interface", message);
+//        Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+//        selectedFarmerModel = model;
     }
 }
