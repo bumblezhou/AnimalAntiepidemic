@@ -1,8 +1,16 @@
 package qsh.com.animalantiepidemic.fragments;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -24,16 +35,22 @@ import qsh.com.animalantiepidemic.helper.LocalResourceHelper;
 import qsh.com.animalantiepidemic.models.FarmerModel;
 import qsh.com.animalantiepidemic.persistent.FarmerDbHelper;
 
+import static android.Manifest.permission_group.CAMERA;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 /**
  * Created by JackZhou on 05/07/2017.
  */
 
-public class EartagFragment extends Fragment {
+public class EartagFragment extends Fragment implements View.OnClickListener {
+
+    private static final int REQUEST_CAMERA = 1;
+
     private List<FarmerModel> farmerModels;
     private AutoCompleteTextView farmerTextView;
-    private ArrayAdapter<String> adapter;
-    private EditText eartagStartTextView;
-    private EditText eartagEndTextView;
+    private EditText eartagStartEditText;
+    private EditText eartagEndEditText;
 
     public EartagFragment() {
         // Required empty public constructor
@@ -57,19 +74,15 @@ public class EartagFragment extends Fragment {
         farmerTextView = (AutoCompleteTextView) getActivity().findViewById(R.id.farmer_selector);
         farmerTextView.setFocusable(true);
 
-//        List<String> farmerCollection = new ArrayList<>();
-//        for (FarmerModel farmer : farmerModels){
-//            final String farmerInfo = farmer.getMobile() + "(" + farmer.getHouseholder() + "-" + farmer.getAddress() + "-" + farmer.getBreedTypeName() + ")";
-//            farmerCollection.add(farmerInfo);
-//        }
-//        Log.i("eartag", "获取畜主collection" + farmerCollection.size() + "条");
-//        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, farmerCollection);
-//        farmerTextView.setAdapter(adapter);
-//        farmerTextView.setThreshold(1);
-
         FarmerArrayAdapter farmerArrayAdapter = new FarmerArrayAdapter(getContext(), R.layout.fragment_eartag, R.id.label_householder, farmerModels);
         farmerTextView.setAdapter(farmerArrayAdapter);
         farmerTextView.setThreshold(1);
+
+        eartagStartEditText = (EditText) getActivity().findViewById(R.id.txt_start_eartag);
+        eartagEndEditText = (EditText) getActivity().findViewById(R.id.txt_end_eartag);
+
+        IntentIntegrator scanIntegrator = new IntentIntegrator(getActivity());
+        scanIntegrator.initiateScan();
     }
 
     @Override
@@ -82,5 +95,16 @@ public class EartagFragment extends Fragment {
         return view;
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_eartag, container, false);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId()==R.id.eartag_btn_scan_start){
+            //scan
+        }
+
+        if(v.getId()==R.id.eartag_btn_scan_start){
+            //scan
+        }
     }
 }

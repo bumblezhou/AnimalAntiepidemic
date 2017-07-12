@@ -1,5 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
 tools:context="qsh.com.animalantiepidemic.fragments.EartagFragment">
 
     <LinearLayout
@@ -45,10 +46,10 @@ tools:context="qsh.com.animalantiepidemic.fragments.EartagFragment">
             android:padding="10dp">
 
             <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_weight="1"-->
-                <!--android:text="@string/eartag_field_title_start_eartag" />-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="@string/eartag_field_title_start_eartag" />-->
 
             <EditText
                 android:id="@+id/txt_start_eartag"
@@ -57,11 +58,19 @@ tools:context="qsh.com.animalantiepidemic.fragments.EartagFragment">
                 android:layout_marginBottom="10dp"
                 android:hint="@string/eartag_field_hint_start_eartag"
                 android:inputType="text"
+                android:layout_weight="8"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/colorBackground"
                 android:textColorHint="@color/colorBackground"
                 android:textColorLink="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/eartag_btn_scan_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/qrcode_scan" />
         </LinearLayout>
 
         <LinearLayout
@@ -84,11 +93,19 @@ tools:context="qsh.com.animalantiepidemic.fragments.EartagFragment">
                 android:layout_marginBottom="10dp"
                 android:hint="@string/eartag_field_hint_start_eartag"
                 android:inputType="text"
+                android:layout_weight="8"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/colorBackground"
                 android:textColorHint="@color/colorBackground"
                 android:textColorLink="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/eartag_btn_scan_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/qrcode_scan" />
         </LinearLayout>
 
         <LinearLayout
