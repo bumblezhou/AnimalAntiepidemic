@@ -55,7 +55,7 @@ import static qsh.com.animalantiepidemic.R.color.colorTextPrimary;
  */
 
 //public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, SortedListAdapter.Callback {
-public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, FarmerRecycleViewAdapter.Listener {
+public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private FarmerAdapter farmerAdapter;
     private FarmerRecycleViewAdapter farmerRecycleViewAdapter;
@@ -131,7 +131,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 //                .commit();
 
         farmerModels = loadAllFarmersFromDatabase();
-        farmerRecycleViewAdapter = new FarmerRecycleViewAdapter(getActivity(), this, farmerModels);
+        farmerRecycleViewAdapter = new FarmerRecycleViewAdapter(getActivity(), farmerModels);
 
         fragmentHomeBinding.farmerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         fragmentHomeBinding.farmerRecyclerView.setAdapter(farmerRecycleViewAdapter);
@@ -218,8 +218,8 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
             if (model.getAddress().contains(lowerCaseQuery)
                     || model.getMobile().contains(lowerCaseQuery)
                     || model.getHouseholder().contains(lowerCaseQuery)
-                    || PinYinUtil.getFirstSpell(model.getAddress()).trim().toLowerCase().contains(query)
-                    || PinYinUtil.getFirstSpell(model.getHouseholder()).trim().toLowerCase().contains(query)) {
+                    || PinYinUtil.getFirstSpell(model.getAddress()).trim().toLowerCase().contains(lowerCaseQuery)
+                    || PinYinUtil.getFirstSpell(model.getHouseholder()).trim().toLowerCase().contains(lowerCaseQuery)) {
                 filteredModelList.add(model);
             }
         }
@@ -319,6 +319,12 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                                 //final String message = "准备提交畜主信息(" + householder + "-" + address + "-" + mobile + "-" + breed_type + ")!";
                                 //Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
 
+                                if(householder.equals("") || address.equals("") || mobile.equals("")){
+                                    final String message = "必填项不能为空，请确认!";
+                                    Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+                                    return;
+                                }
+
                                 SQLiteDatabase db = new FarmerDbHelper(getActivity()).getWritableDatabase();
                                 //找一下库中有没有JSON文件中最大ID的记录
                                 Cursor queryCursor = db.query(FarmerModel.TABLE_NAME, FarmerModel.COLUMN_NAMES,
@@ -410,7 +416,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
             return;
         }
 
-        selectedFarmerModel = farmerModels.get(farmerRecycleViewAdapter.selectedPosition);
+        selectedFarmerModel = farmerRecycleViewAdapter.mFarmerModels.get(farmerRecycleViewAdapter.selectedPosition);
 
         // get prompts.xml view
         LayoutInflater li = LayoutInflater.from(getActivity());
@@ -466,6 +472,12 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
                                 //final String message = "准备提交畜主信息(" + householder + "-" + address + "-" + mobile + "-" + breed_type + ")!";
                                 //Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+
+                                if(householder.equals("") || address.equals("") || mobile.equals("")){
+                                    final String message = "必填项不能为空，请确认!";
+                                    Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+                                    return;
+                                }
 
                                 SQLiteDatabase db = new FarmerDbHelper(getActivity()).getWritableDatabase();
                                 //找一下库中有没有JSON文件中最大ID的记录
@@ -534,13 +546,5 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
         // show it
         alertDialog.show();
-    }
-
-    @Override
-    public void onFarmerModelClicked(FarmerModel model) {
-//        String message = "选中畜主：(" + model.getHouseholder() + "-" + model.getAddress() + "-" + model.getMobile() + "-" + model.getBreedTypeName() + ")";
-//        Log.i("interface", message);
-//        Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
-//        selectedFarmerModel = model;
     }
 }

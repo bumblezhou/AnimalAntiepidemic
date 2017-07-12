@@ -18,7 +18,7 @@
                 android:id="@+id/label_farmer_householder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:width="120dp"
+                android:width="80dp"
                 android:elevation="1dp"
                 android:padding="10dp"
                 android:text="@string/farmer_field_title_householder" />
@@ -42,7 +42,7 @@
                 android:id="@+id/label_farmer_mobile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:width="120dp"
+                android:width="80dp"
                 android:elevation="1dp"
                 android:padding="10dp"
                 android:text="@string/farmer_field_title_address" />
@@ -65,7 +65,7 @@
                 android:id="@+id/label_farmer_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:width="120dp"
+                android:width="80dp"
                 android:elevation="1dp"
                 android:padding="10dp"
                 android:text="@string/farmer_field_title_mobile" />
@@ -88,7 +88,7 @@
                 android:id="@+id/label_farmer_breed_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:width="120dp"
+                android:width="80dp"
                 android:elevation="1dp"
                 android:padding="10dp"
                 android:text="@string/farmer_field_title_breed_type" />

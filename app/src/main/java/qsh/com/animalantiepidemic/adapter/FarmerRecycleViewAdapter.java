@@ -20,17 +20,22 @@ import qsh.com.animalantiepidemic.models.FarmerModel;
 
 public class FarmerRecycleViewAdapter extends RecyclerView.Adapter<FarmerRecycleViewAdapter.FarmerRecycleViewHolder> {
 
-    public interface Listener {
-        void onFarmerModelClicked(FarmerModel model);
-    }
+//    public interface Listener {
+//        void onFarmerModelClicked(FarmerModel model);
+//    }
 
     public int selectedPosition;
-    private final Listener mListener;
+//    private final Listener mListener;
     private final Context mContext;
-    private List<FarmerModel> mFarmerModels;
+    public List<FarmerModel> mFarmerModels;
 
-    public FarmerRecycleViewAdapter(Context context, Listener listener, List<FarmerModel> farmerModels){
-        this.mListener = listener;
+//    public FarmerRecycleViewAdapter(Context context, Listener listener, List<FarmerModel> farmerModels){
+//        this.mListener = listener;
+//        this.mContext = context;
+//        this.mFarmerModels = farmerModels;
+//    }
+
+    public FarmerRecycleViewAdapter(Context context, List<FarmerModel> farmerModels){
         this.mContext = context;
         this.mFarmerModels = farmerModels;
     }
@@ -44,7 +49,6 @@ public class FarmerRecycleViewAdapter extends RecyclerView.Adapter<FarmerRecycle
     public FarmerRecycleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.mContext);
         final ItemFarmerBinding binding = ItemFarmerBinding.inflate(inflater, parent, false);
-        binding.setListener(mListener);
         return new FarmerRecycleViewHolder(binding.getRoot(), binding);
     }
 
