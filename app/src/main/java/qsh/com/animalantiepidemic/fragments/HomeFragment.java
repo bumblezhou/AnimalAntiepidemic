@@ -55,7 +55,7 @@ import static qsh.com.animalantiepidemic.R.color.colorTextPrimary;
  */
 
 //public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, SortedListAdapter.Callback {
-public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, FarmerRecycleViewAdapter.Listener {
 
     private FarmerAdapter farmerAdapter;
     private FarmerRecycleViewAdapter farmerRecycleViewAdapter;
@@ -131,15 +131,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 //                .commit();
 
         farmerModels = loadAllFarmersFromDatabase();
-        farmerRecycleViewAdapter = new FarmerRecycleViewAdapter(getActivity(), new FarmerRecycleViewAdapter.Listener() {
-            @Override
-            public void onFarmerModelClicked(FarmerModel model) {
-                String message = "选中畜主：(" + model.getHouseholder() + "-" + model.getAddress() + "-" + model.getMobile() + "-" + model.getBreedTypeName() + ")";
-                Log.i("database", message);
-                Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
-                selectedFarmerModel = model;
-            }
-        }, farmerModels);
+        farmerRecycleViewAdapter = new FarmerRecycleViewAdapter(getActivity(), this, farmerModels);
 
         fragmentHomeBinding.farmerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         fragmentHomeBinding.farmerRecyclerView.setAdapter(farmerRecycleViewAdapter);
@@ -539,5 +531,13 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
         // show it
         alertDialog.show();
+    }
+
+    @Override
+    public void onFarmerModelClicked(FarmerModel model) {
+        String message = "选中畜主：(" + model.getHouseholder() + "-" + model.getAddress() + "-" + model.getMobile() + "-" + model.getBreedTypeName() + ")";
+        Log.i("interface", message);
+        Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
+        selectedFarmerModel = model;
     }
 }

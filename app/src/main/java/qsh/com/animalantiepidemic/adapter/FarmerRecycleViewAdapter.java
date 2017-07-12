@@ -1,6 +1,7 @@
 package qsh.com.animalantiepidemic.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class FarmerRecycleViewAdapter extends RecyclerView.Adapter<FarmerRecycle
         void onFarmerModelClicked(FarmerModel model);
     }
 
+    public int selectedPosition;
     private final Listener mListener;
     private final Context mContext;
     private List<FarmerModel> mFarmerModels;
@@ -50,6 +52,26 @@ public class FarmerRecycleViewAdapter extends RecyclerView.Adapter<FarmerRecycle
     public void onBindViewHolder(FarmerRecycleViewHolder holder, final int position) {
         FarmerModel farmerModel = mFarmerModels.get(position);
         holder.performBind(farmerModel);
+
+        if(selectedPosition == position){
+            // Here I am just highlighting the background
+            holder.itemView.setBackgroundColor(holder.mBinding.getRoot().getContext().getColor(R.color.colorAccent));
+        }else{
+            holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // Updating old as well as new positions
+                notifyItemChanged(selectedPosition);
+                selectedPosition = position;
+                notifyItemChanged(selectedPosition);
+
+                // Do your another stuff for your onClick
+            }
+        });
     }
 
     @Override
