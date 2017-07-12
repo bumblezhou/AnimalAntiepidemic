@@ -7,46 +7,48 @@ tools:context="qsh.com.animalantiepidemic.fragments.EartagFragment">
         android:background="@drawable/background_color"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
-            android:paddingTop="10dp">
+            android:paddingTop="30dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/farmer_field_title_householder" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="@string/farmer_field_title_householder" />-->
 
             <AutoCompleteTextView
-                android:id="@+id/txt_farmer"
+                android:id="@+id/farmer_selector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:hint="@string/farmer_selector_hint"
-                android:inputType="text|number"
+                android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/colorBackground"
                 android:textColorHint="@color/colorBackground"
                 android:textColorLink="@color/colorPrimary" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp">
+            android:padding="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/eartag_field_title_start_eartag" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="@string/eartag_field_title_start_eartag" />-->
 
             <EditText
                 android:id="@+id/txt_start_eartag"
@@ -54,26 +56,26 @@ tools:context="qsh.com.animalantiepidemic.fragments.EartagFragment">
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:hint="@string/eartag_field_hint_start_eartag"
-                android:inputType="text|number"
+                android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/colorBackground"
                 android:textColorHint="@color/colorBackground"
                 android:textColorLink="@color/colorPrimary" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp">
+            android:padding="10dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/eartag_field_title_end_eartag" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_weight="1"-->
+                <!--android:text="@string/eartag_field_title_end_eartag" />-->
 
             <EditText
                 android:id="@+id/txt_end_eartag"
@@ -81,12 +83,30 @@ tools:context="qsh.com.animalantiepidemic.fragments.EartagFragment">
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:hint="@string/eartag_field_hint_start_eartag"
-                android:inputType="text|number"
+                android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/colorBackground"
                 android:textColorHint="@color/colorBackground"
                 android:textColorLink="@color/colorPrimary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/eartag_btn_submit"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorPrimaryDark"
+                android:text="@string/action_submit"
+                android:textColor="@color/colorBackground" />
         </LinearLayout>
     </LinearLayout>
 

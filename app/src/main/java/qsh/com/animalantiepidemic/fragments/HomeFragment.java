@@ -124,76 +124,19 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
         String fileContent = LocalResourceHelper.loadResourceFileContent(getActivity(), R.raw.farmers);
         Gson gson = new Gson();
         FarmerModel[] farmerArray = gson.fromJson(fileContent, FarmerModel[].class);
-        syncFarmersToDatabase(Arrays.asList(farmerArray));
+        FarmerDbHelper.syncFarmersToDatabase(getActivity(), Arrays.asList(farmerArray));
         Log.i("database", "共获取畜主数据条数:" + farmerArray.length);
 //        farmerAdapter.edit()
 //                .replaceAll(farmerModels)
 //                .commit();
 
-        farmerModels = loadAllFarmersFromDatabase();
+        farmerModels = FarmerDbHelper.loadAllFarmersFromDatabase(getActivity());
         farmerRecycleViewAdapter = new FarmerRecycleViewAdapter(getActivity(), farmerModels);
 
         fragmentHomeBinding.farmerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         fragmentHomeBinding.farmerRecyclerView.setAdapter(farmerRecycleViewAdapter);
 
         super.onStart();
-    }
-
-    private void syncFarmersToDatabase(List<FarmerModel> farmerModels){
-        SQLiteDatabase db = new FarmerDbHelper(getActivity()).getReadableDatabase();
-        //找一下库中有没有JSON文件中最大ID的记录
-        Cursor queryCursor = db.query(FarmerModel.TABLE_NAME, FarmerModel.COLUMN_NAMES,
-                "id = ?",
-                new String[] { farmerModels.get(farmerModels.size() - 1).getId().toString() },
-                null, null, null);
-        Integer recordCount = queryCursor.getCount();
-        db.close();
-
-        //如果有，则别同步了
-        if (recordCount > 0) {
-            Log.i("database", "如果有，则别同步了");
-            Log.i("database", "关闭数据库连接");
-        } else {
-            Log.i("database", "如果没有JSON文件中最大ID的记录");
-            Log.i("database", "开始同步畜主数据到数据库中");
-            db = new FarmerDbHelper(getActivity()).getWritableDatabase();
-            try {
-                for(FarmerModel farmer : farmerModels){
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put("id", farmer.getId());
-                    contentValues.put("householder", farmer.getHouseholder());
-                    contentValues.put("mobile", farmer.getMobile());
-                    contentValues.put("address", farmer.getAddress());
-                    contentValues.put("breed_type", farmer.getBreed_type());
-                    db.insert(FarmerModel.TABLE_NAME, null, contentValues);
-                }
-                Log.i("database", "完成同步畜主数据到数据库，关闭数据库连接");
-            } catch (Exception e) {
-                Log.d("debug", "同步数据库失败，错误信息:" + e.getMessage());
-            }
-            db.close();
-        }
-    }
-
-    private List<FarmerModel> loadAllFarmersFromDatabase(){
-        List<FarmerModel> result = new ArrayList<>();
-        SQLiteDatabase db = new FarmerDbHelper(getActivity()).getReadableDatabase();
-        Cursor queryCursor = db.query(FarmerModel.TABLE_NAME, FarmerModel.COLUMN_NAMES,
-                null,
-                null,
-                null, null, null);
-        farmerModels.clear();
-        while (queryCursor.moveToNext()){
-            FarmerModel tempModel = new FarmerModel(
-                    queryCursor.getInt(queryCursor.getColumnIndex("id")),
-                    queryCursor.getString(queryCursor.getColumnIndex("householder")),
-                    queryCursor.getString(queryCursor.getColumnIndex("mobile")),
-                    queryCursor.getString(queryCursor.getColumnIndex("address")),
-                    queryCursor.getInt(queryCursor.getColumnIndex("breed_type")));
-            result.add(tempModel);
-        }
-        db.close();
-        return result;
     }
 
     @Override
@@ -356,7 +299,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                                         db.close();
 
                                         //提交成攻，刷新界面上的数据
-                                        farmerModels = loadAllFarmersFromDatabase();
+                                        farmerModels = FarmerDbHelper.loadAllFarmersFromDatabase(getActivity());
 
 //                                        farmerAdapter.edit()
 //                                            .replaceAll(farmerModels)
@@ -507,7 +450,7 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
                                         db.close();
 
                                         //提交成攻，刷新界面上的数据
-                                        farmerModels = loadAllFarmersFromDatabase();
+                                        farmerModels = FarmerDbHelper.loadAllFarmersFromDatabase(getActivity());
 //                                        farmerModels =
 //                                        farmerAdapter.edit()
 //                                                .replaceAll(farmerModels)
