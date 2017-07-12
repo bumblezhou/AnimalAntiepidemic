@@ -25,8 +25,6 @@
 
     <!-- String related to farmer data binding-->
     <string name="action_search">搜索</string>
-
-    <!-- String related to farmer data binding-->
     <string name="farmer_field_title_householder">畜主</string>
     <string name="farmer_field_hint_householder">*请输入畜主...</string>
     <string name="farmer_field_title_mobile">手机</string>
@@ -37,6 +35,13 @@
     <string name="farmer_field_hint_breed_type">请输入饲养...</string>
     <string name="farmer_edit_action_title">编辑</string>
     <string name="farmer_add_action_title">添加</string>
+
+    <!-- String related to eartag fragment-->
+    <string name="farmer_selector_hint">*请选择畜主...</string>
+    <string name="eartag_field_title_start_eartag">起始耳标</string>
+    <string name="eartag_field_title_end_eartag">结束耳标</string>
+    <string name="eartag_field_hint_start_eartag">*请扫码/输入起始耳标</string>
+    <string name="eartag_field_hint_end_eartag">*请扫码/输入结束耳标</string>
 
     <string-array name="breed_types">
         <item>猪</item>

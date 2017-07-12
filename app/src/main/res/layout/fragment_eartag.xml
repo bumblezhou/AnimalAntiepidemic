@@ -19,10 +19,75 @@ tools:context="qsh.com.animalantiepidemic.fragments.EartagFragment">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/title_eartag" />
+                android:text="@string/farmer_field_title_householder" />
 
+            <AutoCompleteTextView
+                android:id="@+id/txt_farmer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="@string/farmer_selector_hint"
+                android:inputType="text|number"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/colorBackground"
+                android:textColorHint="@color/colorBackground"
+                android:textColorLink="@color/colorPrimary" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/eartag_field_title_start_eartag" />
+
+            <EditText
+                android:id="@+id/txt_start_eartag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="@string/eartag_field_hint_start_eartag"
+                android:inputType="text|number"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/colorBackground"
+                android:textColorHint="@color/colorBackground"
+                android:textColorLink="@color/colorPrimary" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/eartag_field_title_end_eartag" />
+
+            <EditText
+                android:id="@+id/txt_end_eartag"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:hint="@string/eartag_field_hint_start_eartag"
+                android:inputType="text|number"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/colorBackground"
+                android:textColorHint="@color/colorBackground"
+                android:textColorLink="@color/colorPrimary" />
+        </LinearLayout>
     </LinearLayout>
 
 </layout>
