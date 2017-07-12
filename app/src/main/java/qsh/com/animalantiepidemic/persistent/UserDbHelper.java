@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import qsh.com.animalantiepidemic.R;
+import qsh.com.animalantiepidemic.models.FarmerModel;
 import qsh.com.animalantiepidemic.models.UserModel;
 
 /**
@@ -14,7 +15,7 @@ import qsh.com.animalantiepidemic.models.UserModel;
 
 public class UserDbHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
     private static final String DB_NAME = "animal_antiepidemic.db";
 
     public UserDbHelper(Context context) {

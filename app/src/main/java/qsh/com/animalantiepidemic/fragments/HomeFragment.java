@@ -27,11 +27,13 @@ import android.widget.TextView;
 
 import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 import com.google.gson.Gson;
+import com.google.zxing.Result;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import qsh.com.animalantiepidemic.R;
 import qsh.com.animalantiepidemic.adapter.FarmerAdapter;
 import qsh.com.animalantiepidemic.adapter.FarmerRecycleViewAdapter;
@@ -57,7 +59,6 @@ import static qsh.com.animalantiepidemic.R.color.colorTextPrimary;
 //public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener, SortedListAdapter.Callback {
 public class HomeFragment extends Fragment implements SearchView.OnQueryTextListener {
 
-    private FarmerAdapter farmerAdapter;
     private FarmerRecycleViewAdapter farmerRecycleViewAdapter;
     private List<FarmerModel> farmerModels;
     private FarmerModel selectedFarmerModel;
@@ -84,51 +85,14 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     @Override
     public void onStart() {
 
-//        farmerAdapter = new FarmerAdapter(getActivity(), new FarmerComparator(), new FarmerAdapter.Listener() {
-//            @Override
-//            public void onFarmerModelClicked(FarmerModel model) {
-//                //final String message = "点击了畜主(" + model.getHouseholder() + "-" + model.getMobile() + "-" + model.getAddress() +")!";
-//                //Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
-//                String operations[] = new String[] {"挂耳标", "打芯片", "做防疫"};
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                //builder.setTitle("选择操作：");
-//                builder.setItems(operations, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // the user clicked on colors[which]
-//                        final String message = "点击了第" + which + "项!";
-//                        Snackbar.make(fragmentHomeBinding.getRoot(), message, Snackbar.LENGTH_SHORT).show();
-//                    }
-//                });
-//                final AlertDialog alertDialog = builder.create();
-//                alertDialog.setTitle("选择操作：");
-//                alertDialog.setIcon(R.mipmap.ic_launcher_round);
-//                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//                    @Override
-//                    public void onShow(DialogInterface dialog) {
-//                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(colorPrimaryDark));
-//                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(colorPrimaryDark));
-//                    }
-//                });
-//                alertDialog.show();
-//            }
-//        });
-//        farmerAdapter.addCallback(this);
-
-//        fragmentHomeBinding.farmerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        fragmentHomeBinding.farmerRecyclerView.setAdapter(farmerAdapter);
-
         farmerModels = new ArrayList<>();
         //本地文件存储转入本地数据库存储中
-        Log.i("database", "从本地文件中获取用户数据");
+        Log.i("database", "从本地文件中获取畜主数据");
         String fileContent = LocalResourceHelper.loadResourceFileContent(getActivity(), R.raw.farmers);
         Gson gson = new Gson();
         FarmerModel[] farmerArray = gson.fromJson(fileContent, FarmerModel[].class);
         FarmerDbHelper.syncFarmersToDatabase(getActivity(), Arrays.asList(farmerArray));
         Log.i("database", "共获取畜主数据条数:" + farmerArray.length);
-//        farmerAdapter.edit()
-//                .replaceAll(farmerModels)
-//                .commit();
 
         farmerModels = FarmerDbHelper.loadAllFarmersFromDatabase(getActivity());
         farmerRecycleViewAdapter = new FarmerRecycleViewAdapter(getActivity(), farmerModels);
@@ -143,10 +107,6 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     public boolean onQueryTextSubmit(String query) {
         Log.d("search", "search key:" + query);
         final List<FarmerModel> filteredModelList = filter(farmerModels, query);
-//        farmerAdapter.edit()
-//                .replaceAll(filteredModelList)
-//                .commit();
-
         farmerRecycleViewAdapter.setNewDataset(filteredModelList);
 
         return true;
@@ -174,9 +134,6 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
     public boolean onQueryTextChange(String newText) {
         Log.d("search", "search key:" + newText);
         final List<FarmerModel> filteredModelList = filter(farmerModels, newText);
-//        farmerAdapter.edit()
-//                .replaceAll(filteredModelList)
-//                .commit();
         farmerRecycleViewAdapter.setNewDataset(filteredModelList);
         return true;
     }
@@ -300,10 +257,6 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
                                         //提交成攻，刷新界面上的数据
                                         farmerModels = FarmerDbHelper.loadAllFarmersFromDatabase(getActivity());
-
-//                                        farmerAdapter.edit()
-//                                            .replaceAll(farmerModels)
-//                                            .commit();
                                         farmerRecycleViewAdapter.setNewDataset(farmerModels);
 
                                     } catch (Exception e) {
@@ -451,10 +404,6 @@ public class HomeFragment extends Fragment implements SearchView.OnQueryTextList
 
                                         //提交成攻，刷新界面上的数据
                                         farmerModels = FarmerDbHelper.loadAllFarmersFromDatabase(getActivity());
-//                                        farmerModels =
-//                                        farmerAdapter.edit()
-//                                                .replaceAll(farmerModels)
-//                                                .commit();
                                         farmerRecycleViewAdapter.setNewDataset(farmerModels);
 
                                     } catch (Exception e) {

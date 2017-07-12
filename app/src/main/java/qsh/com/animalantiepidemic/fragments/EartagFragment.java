@@ -28,29 +28,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import qsh.com.animalantiepidemic.R;
 import qsh.com.animalantiepidemic.adapter.FarmerArrayAdapter;
 import qsh.com.animalantiepidemic.databinding.FragmentEartagBinding;
 import qsh.com.animalantiepidemic.helper.LocalResourceHelper;
 import qsh.com.animalantiepidemic.models.FarmerModel;
 import qsh.com.animalantiepidemic.persistent.FarmerDbHelper;
-
-import static android.Manifest.permission_group.CAMERA;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.Result;
 
 /**
  * Created by JackZhou on 05/07/2017.
  */
 
-public class EartagFragment extends Fragment implements View.OnClickListener {
-
-    private static final int REQUEST_CAMERA = 1;
+public class EartagFragment extends Fragment implements View.OnClickListener, ZXingScannerView.ResultHandler {
 
     private List<FarmerModel> farmerModels;
     private AutoCompleteTextView farmerTextView;
     private EditText eartagStartEditText;
     private EditText eartagEndEditText;
+    private ZXingScannerView zXingScannerView;
 
     public EartagFragment() {
         // Required empty public constructor
@@ -61,7 +58,7 @@ public class EartagFragment extends Fragment implements View.OnClickListener {
         super.onStart();
 
         farmerModels = FarmerDbHelper.loadAllFarmersFromDatabase(getActivity());
-        if(farmerModels == null || farmerModels.size() <= 0){
+        if (farmerModels == null || farmerModels.size() <= 0) {
             Log.i("database", "从本地文件中获取用户数据");
             String fileContent = LocalResourceHelper.loadResourceFileContent(getActivity(), R.raw.farmers);
             Gson gson = new Gson();
@@ -79,10 +76,19 @@ public class EartagFragment extends Fragment implements View.OnClickListener {
         farmerTextView.setThreshold(1);
 
         eartagStartEditText = (EditText) getActivity().findViewById(R.id.txt_start_eartag);
+        eartagStartEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                this.onClick(getView());
+            }
+        });
         eartagEndEditText = (EditText) getActivity().findViewById(R.id.txt_end_eartag);
-
-        IntentIntegrator scanIntegrator = new IntentIntegrator(getActivity());
-        scanIntegrator.initiateScan();
+        eartagEndEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                this.onClick(getView());
+            }
+        });
     }
 
     @Override
@@ -98,13 +104,25 @@ public class EartagFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        if(v.getId()==R.id.eartag_btn_scan_start){
-            //scan
-        }
+    public void onPause() {
+        super.onPause();
+        zXingScannerView.stopCamera();
+    }
 
-        if(v.getId()==R.id.eartag_btn_scan_start){
-            //scan
+    @Override
+    public void handleResult(Result result) {
+        if(eartagStartEditText.getText().equals("")){
+            eartagStartEditText.setText(result.getText());
+        } else {
+            eartagEndEditText.setText(result.getText());
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        zXingScannerView = new ZXingScannerView(getActivity());
+        getActivity().setContentView(zXingScannerView);
+        zXingScannerView.setResultHandler(this);
+        zXingScannerView.startCamera();
     }
 }

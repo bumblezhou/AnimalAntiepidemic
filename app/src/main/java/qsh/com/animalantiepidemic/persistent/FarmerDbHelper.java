@@ -17,9 +17,8 @@ import qsh.com.animalantiepidemic.models.FarmerModel;
  */
 
 public class FarmerDbHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
     private static final String DB_NAME = "animal_antiepidemic.db";
-    public static final String TABLE_NAME = "Farmers";
 
     public FarmerDbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -27,13 +26,13 @@ public class FarmerDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "create table if not exists " + TABLE_NAME + " (id integer primary key, householder text, mobile text, address text, breed_type integer)";
+        String sql = "create table if not exists " + FarmerModel.TABLE_NAME + " (id integer primary key, householder text, mobile text, address text, breed_type integer)";
         db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String sql = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        String sql = "DROP TABLE IF EXISTS " + FarmerModel.TABLE_NAME;
         db.execSQL(sql);
         onCreate(db);
     }
