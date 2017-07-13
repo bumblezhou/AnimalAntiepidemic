@@ -78,6 +78,7 @@ public class EartagFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     eartagStartEditText.setText("");
+                    DataHolder.setScanedResult("");
                     DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX = 0;
                     DataHolder.IS_OPEN_SCAN_CAMERA = true;
                     ((MainActivity)getActivity()).switchToScanQrcodeFragment();
@@ -91,9 +92,10 @@ public class EartagFragment extends Fragment {
             btnScanEnd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    eartagEndEditText.setText("");
+                    DataHolder.setScanedResult("");
                     DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX = 1;
                     DataHolder.IS_OPEN_SCAN_CAMERA = true;
-                    eartagEndEditText.setText("");
                     ((MainActivity)getActivity()).switchToScanQrcodeFragment();
                 }
             });
