@@ -1,18 +1,14 @@
 package qsh.com.animalantiepidemic.fragments;
 
 import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
@@ -20,37 +16,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 import com.google.gson.Gson;
-import com.google.zxing.Result;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import qsh.com.animalantiepidemic.R;
-import qsh.com.animalantiepidemic.adapter.FarmerAdapter;
 import qsh.com.animalantiepidemic.adapter.FarmerRecycleViewAdapter;
 import qsh.com.animalantiepidemic.databinding.FragmentHomeBinding;
 import qsh.com.animalantiepidemic.helper.LocalResourceHelper;
 import qsh.com.animalantiepidemic.helper.PinYinUtil;
-import qsh.com.animalantiepidemic.localstate.DataHolder;
-import qsh.com.animalantiepidemic.models.FarmerComparator;
 import qsh.com.animalantiepidemic.models.FarmerModel;
-import qsh.com.animalantiepidemic.models.UserModel;
 import qsh.com.animalantiepidemic.persistent.FarmerDbHelper;
 
-import static qsh.com.animalantiepidemic.R.color.colorAccent;
-import static qsh.com.animalantiepidemic.R.color.colorBackground;
-import static qsh.com.animalantiepidemic.R.color.colorPrimary;
 import static qsh.com.animalantiepidemic.R.color.colorPrimaryDark;
-import static qsh.com.animalantiepidemic.R.color.colorTextPrimary;
 
 /**
  * Created by JackZhou on 05/07/2017.

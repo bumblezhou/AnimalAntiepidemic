@@ -1,53 +1,47 @@
 package qsh.com.animalantiepidemic.fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.Result;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import qsh.com.animalantiepidemic.MainActivity;
 import qsh.com.animalantiepidemic.R;
 import qsh.com.animalantiepidemic.adapter.FarmerArrayAdapter;
 import qsh.com.animalantiepidemic.databinding.FragmentEartagBinding;
 import qsh.com.animalantiepidemic.helper.LocalResourceHelper;
+import qsh.com.animalantiepidemic.localstate.DataHolder;
 import qsh.com.animalantiepidemic.models.FarmerModel;
 import qsh.com.animalantiepidemic.persistent.FarmerDbHelper;
-import com.google.zxing.Result;
 
 /**
  * Created by JackZhou on 05/07/2017.
  */
 
-public class EartagFragment extends Fragment implements View.OnClickListener, ZXingScannerView.ResultHandler {
+public class EartagFragment extends Fragment {
 
     private List<FarmerModel> farmerModels;
     private AutoCompleteTextView farmerAutoCompleteTextView;
     private EditText eartagStartEditText;
+    private ImageButton btnScanStart;
     private EditText eartagEndEditText;
-    private ZXingScannerView zXingScannerView;
+    private ImageButton btnScanEnd;
 
     public EartagFragment() {
         // Required empty public constructor
@@ -69,27 +63,64 @@ public class EartagFragment extends Fragment implements View.OnClickListener, ZX
         }
 
         farmerAutoCompleteTextView = (AutoCompleteTextView) getActivity().findViewById(R.id.farmer_selector);
-        farmerAutoCompleteTextView.setFocusable(true);
+        if(farmerAutoCompleteTextView != null){
+            farmerAutoCompleteTextView.setFocusable(true);
 
-        FarmerArrayAdapter farmerArrayAdapter = new FarmerArrayAdapter(getContext(), R.layout.fragment_eartag, R.id.label_householder, farmerModels);
-        farmerAutoCompleteTextView.setAdapter(farmerArrayAdapter);
-        farmerAutoCompleteTextView.setThreshold(1);
+            FarmerArrayAdapter farmerArrayAdapter = new FarmerArrayAdapter(getContext(), R.layout.fragment_eartag, R.id.label_householder, farmerModels);
+            farmerAutoCompleteTextView.setAdapter(farmerArrayAdapter);
+            farmerAutoCompleteTextView.setThreshold(1);
+        }
 
         eartagStartEditText = (EditText) getActivity().findViewById(R.id.txt_start_eartag);
-        eartagStartEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                this.onClick(getView());
-            }
-        });
+        btnScanStart = (ImageButton) getActivity().findViewById(R.id.eartag_btn_scan_start);
+        if(btnScanStart != null){
+            btnScanStart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    eartagStartEditText.setText("");
+                    DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX = 0;
+                    DataHolder.IS_OPEN_SCAN_CAMERA = true;
+                    ((MainActivity)getActivity()).switchToScanQrcodeFragment();
+                }
+            });
+        }
+
         eartagEndEditText = (EditText) getActivity().findViewById(R.id.txt_end_eartag);
-        eartagEndEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                this.onClick(getView());
-            }
-        });
+        btnScanEnd = (ImageButton) getActivity().findViewById(R.id.eartag_btn_scan_end);
+        if(btnScanEnd != null){
+            btnScanEnd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX = 1;
+                    DataHolder.IS_OPEN_SCAN_CAMERA = true;
+                    eartagEndEditText.setText("");
+                    ((MainActivity)getActivity()).switchToScanQrcodeFragment();
+                }
+            });
+        }
+
+        //启动EartagFragment时，填入扫描结果值
+        if(DataHolder.getScanedResult() != null && !DataHolder.getScanedResult().equals("")){
+            setScanedResultText(DataHolder.getScanedResult());
+        }
     }
+
+    private void setScanedResultText(String scanedResultText){
+        if(eartagStartEditText == null){
+            eartagStartEditText = (EditText) getActivity().findViewById(R.id.txt_start_eartag);
+        }
+
+        if(eartagEndEditText == null){
+            eartagEndEditText = (EditText) getActivity().findViewById(R.id.txt_end_eartag);
+        }
+
+        if(DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX == 0){
+            eartagStartEditText.setText(scanedResultText);
+        } else {
+            eartagEndEditText.setText(scanedResultText);
+        }
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -101,30 +132,5 @@ public class EartagFragment extends Fragment implements View.OnClickListener, ZX
         return view;
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_eartag, container, false);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if(zXingScannerView != null){
-            zXingScannerView.stopCamera();
-        }
-    }
-
-    @Override
-    public void handleResult(Result result) {
-        if(eartagStartEditText.getText().equals("")){
-            eartagStartEditText.setText(result.getText());
-        } else {
-            eartagEndEditText.setText(result.getText());
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        zXingScannerView = new ZXingScannerView(getActivity());
-        getActivity().setContentView(zXingScannerView);
-        zXingScannerView.setResultHandler(this);
-        zXingScannerView.startCamera();
     }
 }

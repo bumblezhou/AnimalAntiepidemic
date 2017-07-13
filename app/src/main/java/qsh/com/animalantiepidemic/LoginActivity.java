@@ -237,6 +237,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         userDbHelper.onCreate(userDb);
         userDb.close();
 
+//        UserDbHelper userDbHelper = new UserDbHelper(this);
         //默认按id从小到大排序
         Log.i("database", "按id从小到大排序用户数据");
         Collections.sort(userModels, new UserComparator());

@@ -43,6 +43,8 @@
     <string name="eartag_field_hint_start_eartag">*请扫码/输入起始耳标</string>
     <string name="eartag_field_hint_end_eartag">*请扫码/输入结束耳标</string>
     <string name="action_submit">提交</string>
+    <string name="action_scan_start_eartag">扫描起始耳标</string>
+    <string name="action_scan_end_eartag">扫描结束耳标</string>
 
     <string-array name="breed_types">
         <item>猪</item>

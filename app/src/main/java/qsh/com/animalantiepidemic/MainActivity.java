@@ -1,7 +1,9 @@
 package qsh.com.animalantiepidemic;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
@@ -13,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +24,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.zxing.Result;
+import com.google.zxing.client.android.Intents;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import qsh.com.animalantiepidemic.databinding.FragmentAboutBinding;
 import qsh.com.animalantiepidemic.databinding.FragmentChipsetBinding;
 import qsh.com.animalantiepidemic.databinding.FragmentEartagBinding;
@@ -29,10 +36,12 @@ import qsh.com.animalantiepidemic.fragments.AntiepidemicFragment;
 import qsh.com.animalantiepidemic.fragments.ChipsetFragment;
 import qsh.com.animalantiepidemic.fragments.EartagFragment;
 import qsh.com.animalantiepidemic.fragments.HomeFragment;
+import qsh.com.animalantiepidemic.fragments.ScanQrcodeFragment;
+import qsh.com.animalantiepidemic.localstate.DataHolder;
 
 import static qsh.com.animalantiepidemic.R.color.colorPrimaryDark;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     BottomNavigationView bottomNavigationView;
 
@@ -45,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     ChipsetFragment chipFragment;
     EartagFragment eartagFragment;
     HomeFragment homeFragment;
+    ScanQrcodeFragment scanQrcodeFragment;
 
     MenuItem prevMenuItem;
 
@@ -80,11 +90,44 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+    public void switchToScanQrcodeFragment(){
+        Handler uiHandler = new Handler();
+        uiHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if(DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX == 0){
+                    setTitle(R.string.action_scan_start_eartag);
+                } else {
+                    setTitle(R.string.action_scan_end_eartag);
+                }
+                viewPager.setCurrentItem(5);
+            }
+        });
+    }
+
+    public void switchToEartagFragment(){
+        Handler uiHandler = new Handler();
+        uiHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                setTitle(R.string.title_eartag);
+                viewPager.setCurrentItem(1);
+            }
+        });
+    }
+
     private ViewPager.OnPageChangeListener mOnViewPageChangeListener
             = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            //Log.d("fragment", "页面滑动了,滑动位置：" + position);
+            if(position > 4 && !DataHolder.IS_OPEN_SCAN_CAMERA){
+                switchToEartagFragment();
+            }
         }
 
         @Override
@@ -94,7 +137,11 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 bottomNavigationView.getMenu().getItem(0).setChecked(false);
             }
-            Log.d("page", "onPageSelected: " + position);
+            //如果选中的页面索引大于4,则直接跳转到页面1.
+            //Log.d("page", "onPageSelected: " + position);
+            if(position > 4){
+                position = 1;
+            }
             bottomNavigationView.getMenu().getItem(position).setChecked(true);
             prevMenuItem = bottomNavigationView.getMenu().getItem(position);
 
@@ -108,25 +155,54 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        aboutFragment = new AboutFragment();
-        antiepidemicFragment = new AntiepidemicFragment();
-        chipFragment = new ChipsetFragment();
-        eartagFragment = new EartagFragment();
-        homeFragment = new HomeFragment();
+
+        if(aboutFragment == null){
+            aboutFragment = new AboutFragment();
+        }
+
+        if(antiepidemicFragment == null){
+            antiepidemicFragment = new AntiepidemicFragment();
+        }
+
+        if(chipFragment == null){
+            chipFragment = new ChipsetFragment();
+        }
+
+        if(eartagFragment == null){
+            eartagFragment = new EartagFragment();
+        }
+
+        if(homeFragment == null){
+            homeFragment = new HomeFragment();
+        }
+
+        if(scanQrcodeFragment == null){
+            scanQrcodeFragment = new ScanQrcodeFragment();
+        }
 
         adapter.addFragment(homeFragment);
         adapter.addFragment(eartagFragment);
         adapter.addFragment(chipFragment);
         adapter.addFragment(antiepidemicFragment);
         adapter.addFragment(aboutFragment);
+        adapter.addFragment(scanQrcodeFragment);
 
         viewPager.setAdapter(adapter);
+        Log.d("fragment", "total fragment size:" + viewPager.getScrollBarSize());
     }
 
     private void backToHomepage(){
-        bottomNavigationView.getMenu().getItem(0).setChecked(true);
-        setTitle(R.string.title_home);
-        viewPager.setCurrentItem(0);
+        Handler uiHandler = new Handler();
+        uiHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                bottomNavigationView.getMenu().getItem(0).setChecked(true);
+                setTitle(R.string.title_home);
+                viewPager.setCurrentItem(0);
+            }
+        });
     }
 
     @Override
@@ -188,5 +264,27 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void handleResult(Result result) {
+        if(result == null){
+            return;
+        }
+        Log.d("qrscan", "scan result:" + result.getText());
+        //Toast.makeText(this, "Content:" + result.getText() + " Format:" + result.getBarcodeFormat().toString(), Toast.LENGTH_LONG).show();
+        DataHolder.setScanedResult(result.getText());
+        switchToEartagFragment();
+    }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // your code
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            setContentView(R.layout.activity_login);
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 }
