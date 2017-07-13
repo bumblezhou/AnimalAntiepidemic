@@ -2,13 +2,12 @@ package qsh.com.animalantiepidemic.models;
 
 import android.support.annotation.NonNull;
 
-import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 /**
  * Created by JackZhou on 04/07/2017.
  */
 
-public class FarmerModel  implements SortedListAdapter.ViewModel {
+public class FarmerModel {
     private Integer id;
     private String householder;
     private String mobile;
@@ -68,26 +67,6 @@ public class FarmerModel  implements SortedListAdapter.ViewModel {
 
     public String getBreedTypeName(){
         return breed_type == 0 ? "猪" : breed_type == 1 ? "牛羊" : "混合";
-    }
-
-    @Override
-    public <T> boolean isSameModelAs(@NonNull T item) {
-        if (item instanceof FarmerModel) {
-            final FarmerModel farmerModel = (FarmerModel) item;
-            return farmerModel.getId() == getId();
-        }
-        return false;
-    }
-
-    @Override
-    public <T> boolean isContentTheSameAs(@NonNull T item) {
-        if (item instanceof FarmerModel) {
-            final FarmerModel farmerModel = (FarmerModel) item;
-            return farmerModel.getAddress().equals(getAddress())
-                    && farmerModel.getHouseholder().equals(getHouseholder())
-                    && farmerModel.getMobile().equals(getMobile());
-        }
-        return false;
     }
 
     public static String TABLE_NAME = "Farmers";
