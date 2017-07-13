@@ -37,7 +37,7 @@ public class FarmerDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public static void syncFarmersToDatabase(Context context, List<FarmerModel> farmerModels){
+    public static void syncFarmersToDatabaseA(Context context, List<FarmerModel> farmerModels){
         SQLiteDatabase db = new FarmerDbHelper(context).getReadableDatabase();
         //找一下库中有没有JSON文件中最大ID的记录
         Cursor queryCursor = db.query(FarmerModel.TABLE_NAME, FarmerModel.COLUMN_NAMES,
@@ -73,7 +73,7 @@ public class FarmerDbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public static List<FarmerModel> loadAllFarmersFromDatabase(Context context){
+    public static List<FarmerModel> loadAllFarmersFromDatabaseA(Context context){
         List<FarmerModel> result = new ArrayList<>();
         SQLiteDatabase db = new FarmerDbHelper(context).getReadableDatabase();
         Cursor queryCursor = db.query(FarmerModel.TABLE_NAME, FarmerModel.COLUMN_NAMES,
