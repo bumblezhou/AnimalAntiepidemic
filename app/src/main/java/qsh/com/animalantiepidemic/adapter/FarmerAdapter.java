@@ -9,7 +9,6 @@ import com.github.wrdlbrnft.sortedlistadapter.SortedListAdapter;
 
 import java.util.Comparator;
 
-import qsh.com.animalantiepidemic.adapter.viewholder.FarmerViewHolder;
 import qsh.com.animalantiepidemic.databinding.ItemFarmerBinding;
 import qsh.com.animalantiepidemic.models.FarmerModel;
 

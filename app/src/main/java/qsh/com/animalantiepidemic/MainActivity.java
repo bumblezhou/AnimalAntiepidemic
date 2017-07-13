@@ -1,36 +1,24 @@
 package qsh.com.animalantiepidemic;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.zxing.Result;
-import com.google.zxing.client.android.Intents;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-import qsh.com.animalantiepidemic.databinding.FragmentAboutBinding;
-import qsh.com.animalantiepidemic.databinding.FragmentChipsetBinding;
-import qsh.com.animalantiepidemic.databinding.FragmentEartagBinding;
+import qsh.com.animalantiepidemic.adapter.ViewPagerAdapter;
 import qsh.com.animalantiepidemic.fragments.AboutFragment;
 import qsh.com.animalantiepidemic.fragments.AntiepidemicFragment;
 import qsh.com.animalantiepidemic.fragments.ChipsetFragment;
@@ -38,8 +26,6 @@ import qsh.com.animalantiepidemic.fragments.EartagFragment;
 import qsh.com.animalantiepidemic.fragments.HomeFragment;
 import qsh.com.animalantiepidemic.fragments.ScanQrcodeFragment;
 import qsh.com.animalantiepidemic.localstate.DataHolder;
-
-import static qsh.com.animalantiepidemic.R.color.colorPrimaryDark;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
