@@ -44,7 +44,7 @@ import com.google.zxing.Result;
 public class EartagFragment extends Fragment implements View.OnClickListener, ZXingScannerView.ResultHandler {
 
     private List<FarmerModel> farmerModels;
-    private AutoCompleteTextView farmerTextView;
+    private AutoCompleteTextView farmerAutoCompleteTextView;
     private EditText eartagStartEditText;
     private EditText eartagEndEditText;
     private ZXingScannerView zXingScannerView;
@@ -68,12 +68,12 @@ public class EartagFragment extends Fragment implements View.OnClickListener, ZX
             Log.i("database", "共获取畜主数据条数:" + farmerArray.length);
         }
 
-        farmerTextView = (AutoCompleteTextView) getActivity().findViewById(R.id.farmer_selector);
-        farmerTextView.setFocusable(true);
+        farmerAutoCompleteTextView = (AutoCompleteTextView) getActivity().findViewById(R.id.farmer_selector);
+        farmerAutoCompleteTextView.setFocusable(true);
 
         FarmerArrayAdapter farmerArrayAdapter = new FarmerArrayAdapter(getContext(), R.layout.fragment_eartag, R.id.label_householder, farmerModels);
-        farmerTextView.setAdapter(farmerArrayAdapter);
-        farmerTextView.setThreshold(1);
+        farmerAutoCompleteTextView.setAdapter(farmerArrayAdapter);
+        farmerAutoCompleteTextView.setThreshold(1);
 
         eartagStartEditText = (EditText) getActivity().findViewById(R.id.txt_start_eartag);
         eartagStartEditText.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +106,9 @@ public class EartagFragment extends Fragment implements View.OnClickListener, ZX
     @Override
     public void onPause() {
         super.onPause();
-        zXingScannerView.stopCamera();
+        if(zXingScannerView != null){
+            zXingScannerView.stopCamera();
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package qsh.com.animalantiepidemic.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,7 +59,7 @@ public class FarmerRecycleViewAdapter extends RecyclerView.Adapter<FarmerRecycle
 
         if(selectedPosition == position){
             // Here I am just highlighting the background
-            holder.itemView.setBackgroundColor(holder.mBinding.getRoot().getContext().getColor(R.color.colorAccent));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.mBinding.getRoot().getContext(), R.color.colorAccent));
         }else{
             holder.itemView.setBackgroundColor(Color.TRANSPARENT);
         }

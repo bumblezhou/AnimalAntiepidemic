@@ -37,6 +37,7 @@ import qsh.com.animalantiepidemic.contentprovider.LocalUserCursorLoader;
 import qsh.com.animalantiepidemic.localstate.DataHolder;
 import qsh.com.animalantiepidemic.models.UserComparator;
 import qsh.com.animalantiepidemic.models.UserModel;
+import qsh.com.animalantiepidemic.persistent.FarmerDbHelper;
 import qsh.com.animalantiepidemic.persistent.UserDbHelper;
 import qsh.com.animalantiepidemic.security.DesHelper;
 
@@ -226,7 +227,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         Log.d("debug", "phoneNumbers length = " + phonese.size());
         addPhoneNumbersToAutoComplete(phonese);
 
+        FarmerDbHelper farmerDbHelper = new FarmerDbHelper(this);
+        SQLiteDatabase farmerDb = farmerDbHelper.getReadableDatabase();
+        farmerDbHelper.onCreate(farmerDb);
+        farmerDb.close();
+
         UserDbHelper userDbHelper = new UserDbHelper(this);
+        SQLiteDatabase userDb = userDbHelper.getReadableDatabase();
+        userDbHelper.onCreate(userDb);
+        userDb.close();
 
         //默认按id从小到大排序
         Log.i("database", "按id从小到大排序用户数据");

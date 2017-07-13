@@ -15,7 +15,7 @@ import qsh.com.animalantiepidemic.models.UserModel;
 
 public class UserDbHelper extends SQLiteOpenHelper {
 
-    private static final int DB_VERSION = 4;
+    private static final int DB_VERSION = 1;
     private static final String DB_NAME = "animal_antiepidemic.db";
 
     public UserDbHelper(Context context) {
