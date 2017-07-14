@@ -17,6 +17,7 @@ import android.view.View;
 
 import com.google.zxing.Result;
 
+import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import qsh.com.animalantiepidemic.adapter.ViewPagerAdapter;
 import qsh.com.animalantiepidemic.fragments.AboutFragment;
@@ -24,10 +25,11 @@ import qsh.com.animalantiepidemic.fragments.AntiepidemicFragment;
 import qsh.com.animalantiepidemic.fragments.ChipsetFragment;
 import qsh.com.animalantiepidemic.fragments.EartagFragment;
 import qsh.com.animalantiepidemic.fragments.HomeFragment;
-import qsh.com.animalantiepidemic.fragments.ScanQrcodeFragment;
+import qsh.com.animalantiepidemic.fragments.ZBarScanQrcodeFragment;
+import qsh.com.animalantiepidemic.fragments.ZXingScanQrcodeFragment;
 import qsh.com.animalantiepidemic.localstate.DataHolder;
 
-public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
+public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, ZBarScannerView.ResultHandler {
 
     BottomNavigationView bottomNavigationView;
 
@@ -40,7 +42,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     ChipsetFragment chipFragment;
     EartagFragment eartagFragment;
     HomeFragment homeFragment;
-    ScanQrcodeFragment scanQrcodeFragment;
+    ZXingScanQrcodeFragment zXingScanQrcodeFragment;
+    ZBarScanQrcodeFragment zBarScanQrcodeFragment;
 
     MenuItem prevMenuItem;
 
@@ -161,8 +164,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             homeFragment = new HomeFragment();
         }
 
-        if(scanQrcodeFragment == null){
-            scanQrcodeFragment = new ScanQrcodeFragment();
+        //if(zXingScanQrcodeFragment == null){
+        //    zXingScanQrcodeFragment = new ZXingScanQrcodeFragment();
+        //}
+        if(zBarScanQrcodeFragment == null){
+            zBarScanQrcodeFragment = new ZBarScanQrcodeFragment();
         }
 
         adapter.addFragment(homeFragment);
@@ -170,7 +176,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         adapter.addFragment(chipFragment);
         adapter.addFragment(antiepidemicFragment);
         adapter.addFragment(aboutFragment);
-        adapter.addFragment(scanQrcodeFragment);
+        //adapter.addFragment(zXingScanQrcodeFragment);
+        adapter.addFragment(zBarScanQrcodeFragment);
 
         viewPager.setAdapter(adapter);
         Log.d("fragment", "total fragment size:" + viewPager.getScrollBarSize());
@@ -271,5 +278,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void handleResult(me.dm7.barcodescanner.zbar.Result result) {
+        if(result == null){
+            return;
+        }
+        Log.d("qrscan", "scan result:" + result.getContents());
+        //Toast.makeText(this, "Content:" + result.getText() + " Format:" + result.getBarcodeFormat().toString(), Toast.LENGTH_LONG).show();
+        DataHolder.setScanedResult(result.getContents());
+        switchToEartagFragment();
     }
 }
