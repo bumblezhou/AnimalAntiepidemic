@@ -48,9 +48,10 @@ public class AboutFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 DataHolder.setCurrentUser(null);
-                Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                getActivity().setContentView(R.layout.activity_login);
+//                Intent intent = new Intent(getActivity().getApplicationContext(), LoginActivity.class);
+//                startActivity(intent);
+//                getActivity().setContentView(R.layout.activity_login);
+                getActivity().finish();
             }
         });
     }

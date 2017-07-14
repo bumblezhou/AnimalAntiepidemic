@@ -14,8 +14,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.google.zxing.Result;
+import android.widget.Toast;
 
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -164,9 +163,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             homeFragment = new HomeFragment();
         }
 
-        //if(zXingScanQrcodeFragment == null){
-        //    zXingScanQrcodeFragment = new ZXingScanQrcodeFragment();
-        //}
+//        if(zXingScanQrcodeFragment == null){
+//            zXingScanQrcodeFragment = new ZXingScanQrcodeFragment();
+//        }
         if(zBarScanQrcodeFragment == null){
             zBarScanQrcodeFragment = new ZBarScanQrcodeFragment();
         }
@@ -176,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         adapter.addFragment(chipFragment);
         adapter.addFragment(antiepidemicFragment);
         adapter.addFragment(aboutFragment);
-        //adapter.addFragment(zXingScanQrcodeFragment);
+//        adapter.addFragment(zXingScanQrcodeFragment);
         adapter.addFragment(zBarScanQrcodeFragment);
 
         viewPager.setAdapter(adapter);
@@ -257,10 +256,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     @Override
-    public void handleResult(Result result) {
+    public void handleResult(com.google.zxing.Result result) {
         if(result == null){
             return;
         }
+        DataHolder.IS_OPEN_SCAN_CAMERA = false;
         Log.d("qrscan", "scan result:" + result.getText());
         //Toast.makeText(this, "Content:" + result.getText() + " Format:" + result.getBarcodeFormat().toString(), Toast.LENGTH_LONG).show();
         DataHolder.setScanedResult(result.getText());
@@ -268,26 +268,28 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            // your code
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            startActivity(intent);
-            setContentView(R.layout.activity_login);
-            return true;
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     public void handleResult(me.dm7.barcodescanner.zbar.Result result) {
         if(result == null){
             return;
         }
+        DataHolder.IS_OPEN_SCAN_CAMERA = false;
         Log.d("qrscan", "scan result:" + result.getContents());
         //Toast.makeText(this, "Content:" + result.getText() + " Format:" + result.getBarcodeFormat().toString(), Toast.LENGTH_LONG).show();
         DataHolder.setScanedResult(result.getContents());
+//        Toast.makeText(this, "Contents = " + result.getContents() + ", Format = " + result.getBarcodeFormat().getName(), Toast.LENGTH_LONG);
         switchToEartagFragment();
     }
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            // your code
+//            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//            startActivity(intent);
+//            setContentView(R.layout.activity_login);
+//            return true;
+//        }
+//
+//        return super.onKeyDown(keyCode, event);
+//    }
 }

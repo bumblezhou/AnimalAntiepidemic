@@ -362,6 +362,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 setContentView(R.layout.activity_main);
+                finish();
 
                 DataHolder.setCurrentUser(validateUser);
             } else {

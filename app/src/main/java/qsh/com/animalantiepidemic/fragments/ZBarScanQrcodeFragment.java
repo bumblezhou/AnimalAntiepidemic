@@ -39,8 +39,7 @@ public class ZBarScanQrcodeFragment  extends Fragment {
     private static final String AUTO_FOCUS_STATE = "AUTO_FOCUS_STATE";
     private static final String SELECTED_FORMATS = "SELECTED_FORMATS";
     private static final String CAMERA_ID = "CAMERA_ID";
-    private ZBarScannerView zBarScannerView;
-    LinearLayout qrCameraLayout;
+    private ZBarScannerView mScannerView;
     private boolean mFlash;
     private boolean mAutoFocus;
     private ArrayList<Integer> mSelectedIndices;
@@ -49,6 +48,7 @@ public class ZBarScanQrcodeFragment  extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
         Log.d("fragment", "onCreateView 事件开发执行...");
+        mScannerView = new ZBarScannerView(getActivity());
         if(state != null) {
             mFlash = state.getBoolean(FLASH_STATE, false);
             mAutoFocus = state.getBoolean(AUTO_FOCUS_STATE, true);
@@ -60,27 +60,30 @@ public class ZBarScanQrcodeFragment  extends Fragment {
             mSelectedIndices = null;
             mCameraId = -1;
         }
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_zbar_scanqrcode, container, false);
+        setupFormats();
+        return mScannerView;
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
-        Log.d("fragment", "onStart 事件开发执行...,并创建zBarScannerView");
-        qrCameraLayout = (LinearLayout) getView().findViewById(R.id.zbar_layout_qrcamera);
-        zBarScannerView = new ZBarScannerView(getActivity());
-        zBarScannerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        qrCameraLayout.addView(zBarScannerView);
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler((MainActivity)getActivity());
+        mScannerView.startCamera(mCameraId);
+        mScannerView.setFlash(mFlash);
+        mScannerView.setAutoFocus(mAutoFocus);
+    }
 
-        setupFormats();
-
-        zBarScannerView.setResultHandler((MainActivity)getActivity());
-        zBarScannerView.startCamera();
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(FLASH_STATE, mFlash);
+        outState.putBoolean(AUTO_FOCUS_STATE, mAutoFocus);
+        outState.putIntegerArrayList(SELECTED_FORMATS, mSelectedIndices);
+        outState.putInt(CAMERA_ID, mCameraId);
     }
 
     public void setupFormats() {
-        List<BarcodeFormat> formats = new ArrayList<>();
+        List<BarcodeFormat> formats = new ArrayList<BarcodeFormat>();
         if(mSelectedIndices == null || mSelectedIndices.isEmpty()) {
             mSelectedIndices = new ArrayList<Integer>();
             for(int i = 0; i < BarcodeFormat.ALL_FORMATS.size(); i++) {
@@ -91,29 +94,15 @@ public class ZBarScanQrcodeFragment  extends Fragment {
         for(int index : mSelectedIndices) {
             formats.add(BarcodeFormat.ALL_FORMATS.get(index));
         }
-        if(zBarScannerView != null) {
-            zBarScannerView.setFormats(formats);
+//        formats.add(BarcodeFormat.DATABAR);
+        if(mScannerView != null) {
+            mScannerView.setFormats(formats);
         }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("fragment", "onStop 事件开发执行...");
-        Handler uiHandler = new Handler();
-        uiHandler.post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                if(DataHolder.getScanedResult() != null && !DataHolder.getScanedResult().equals("")) {
-                    if(zBarScannerView != null){
-                        zBarScannerView.stopCamera();
-                        DataHolder.IS_OPEN_SCAN_CAMERA = false;
-                        ((MainActivity)getActivity()).switchToEartagFragment();
-                    }
-                }
-            }
-        });
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();
     }
 }
