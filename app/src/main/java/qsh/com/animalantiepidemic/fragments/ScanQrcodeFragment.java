@@ -58,16 +58,17 @@ public class ScanQrcodeFragment  extends Fragment {
 //        if(zXingScannerView != null){
 //            zXingScannerView.stopCamera();
 //            DataHolder.IS_OPEN_SCAN_CAMERA = false;
-//        }
-//        Handler uiHandler = new Handler();
-//        uiHandler.post(new Runnable()
-//        {
-//            @Override
-//            public void run()
+//
+//            Handler uiHandler = new Handler();
+//            uiHandler.post(new Runnable()
 //            {
-//                ((MainActivity)getActivity()).switchToEartagFragment();
-//            }
-//        });
+//                @Override
+//                public void run()
+//                {
+//                    ((MainActivity)getActivity()).switchToEartagFragment();
+//                }
+//            });
+//        }
 //    }
 
     @Override
@@ -77,16 +78,18 @@ public class ScanQrcodeFragment  extends Fragment {
         if(zXingScannerView != null){
             zXingScannerView.stopCamera();
             DataHolder.IS_OPEN_SCAN_CAMERA = false;
-        }
-        Handler uiHandler = new Handler();
-        uiHandler.post(new Runnable()
-        {
-            @Override
-            public void run()
+            Handler uiHandler = new Handler();
+            uiHandler.post(new Runnable()
             {
-                ((MainActivity)getActivity()).switchToEartagFragment();
-            }
-        });
+                @Override
+                public void run()
+                {
+                    if(DataHolder.getScanedResult() != null && !DataHolder.getScanedResult().equals("")) {
+                        ((MainActivity)getActivity()).switchToEartagFragment();
+                    }
+                }
+            });
+        }
     }
 
 //    @Override

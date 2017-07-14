@@ -30,18 +30,15 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_account_black_48dp" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/account_username"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal">
-                    <TextView
-                        android:id="@+id/account_username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:text="@{user.fullName}"
-                        android:textAlignment="gravity" />
-                </RelativeLayout>
+                    android:layout_centerInParent="true"
+                    android:minHeight="48dp"
+                    android:text="@{user.fullName}"
+                    android:textSize="20dp"
+                    android:paddingTop="10dp"/>
 
             </TableRow>
 
@@ -55,17 +52,17 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_phone_black_48dp" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/account_mobile"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal">
-                    <TextView
-                        android:id="@+id/account_mobile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:text="@{user.name}" />
-                </RelativeLayout>
+                    android:layout_centerInParent="true"
+                    android:minHeight="48dp"
+                    android:textSize="20dp"
+                    android:text="@{user.name}"
+                    android:paddingTop="10dp"
+                    android:autoLink="phone"
+                    android:textColorLink="@color/colorLinkText"/>
             </TableRow>
 
             <TableRow

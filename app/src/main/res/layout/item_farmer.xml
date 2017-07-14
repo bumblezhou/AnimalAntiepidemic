@@ -34,7 +34,9 @@
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:text="@{model.mobile}"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:autoLink="phone"
+            android:textColorLink="@color/colorLinkText"/>
 
         <TextView
             android:layout_width="wrap_content"

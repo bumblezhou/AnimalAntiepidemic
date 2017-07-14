@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             //Log.d("fragment", "页面滑动了,滑动位置：" + position);
-            if(position > 4 && !DataHolder.IS_OPEN_SCAN_CAMERA){
-                switchToEartagFragment();
+            if(position >= 5 && !DataHolder.IS_OPEN_SCAN_CAMERA){
+                backToHomepage();
             }
         }
 
@@ -124,13 +124,14 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 bottomNavigationView.getMenu().getItem(0).setChecked(false);
             }
             //如果选中的页面索引大于4,则直接跳转到页面1.
-            //Log.d("page", "onPageSelected: " + position);
+            Log.d("page", "onPageSelected: " + position);
             if(position > 4){
-                position = 1;
+                position = 0;
+                backToHomepage();
+            } else {
+                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+                prevMenuItem = bottomNavigationView.getMenu().getItem(position);
             }
-            bottomNavigationView.getMenu().getItem(position).setChecked(true);
-            prevMenuItem = bottomNavigationView.getMenu().getItem(position);
-
         }
 
         @Override

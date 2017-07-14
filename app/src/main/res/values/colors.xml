@@ -7,7 +7,7 @@
     <color name="colorTextPrimary">#FFFFFF</color>
     <color name="colorAlert">#f32e31</color>
     <color name="colorSuccessful">#7DBE3D</color>
-
+    <color name="colorLinkText">#0462C7</color>
 
     <color name="tab_disable">#979797</color>
     <color name="tab_enable">#FFFFFF</color>
