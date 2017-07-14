@@ -75,21 +75,23 @@ public class ScanQrcodeFragment  extends Fragment {
     public void onStop(){
         super.onStop();
         Log.d("fragment", "onStop 事件开发执行...");
-        if(zXingScannerView != null){
-            zXingScannerView.stopCamera();
-            DataHolder.IS_OPEN_SCAN_CAMERA = false;
-            Handler uiHandler = new Handler();
-            uiHandler.post(new Runnable()
+        Handler uiHandler = new Handler();
+        uiHandler.post(new Runnable()
+        {
+            @Override
+            public void run()
             {
-                @Override
-                public void run()
-                {
-                    if(DataHolder.getScanedResult() != null && !DataHolder.getScanedResult().equals("")) {
-                        ((MainActivity)getActivity()).switchToEartagFragment();
+                if(DataHolder.getScanedResult() != null && !DataHolder.getScanedResult().equals("")) {
+
+                    if(zXingScannerView != null){
+                    zXingScannerView.stopCamera();
+                    getActivity().onBackPressed();
+                    DataHolder.IS_OPEN_SCAN_CAMERA = false;
+                    ((MainActivity)getActivity()).switchToEartagFragment();
                     }
                 }
-            });
-        }
+            }
+        });
     }
 
 //    @Override

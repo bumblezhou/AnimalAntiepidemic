@@ -126,12 +126,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             //如果选中的页面索引大于4,则直接跳转到页面1.
             Log.d("page", "onPageSelected: " + position);
             if(position > 4){
-                position = 0;
-                backToHomepage();
-            } else {
-                bottomNavigationView.getMenu().getItem(position).setChecked(true);
-                prevMenuItem = bottomNavigationView.getMenu().getItem(position);
+                position = 1;
             }
+            bottomNavigationView.getMenu().getItem(position).setChecked(true);
+            prevMenuItem = bottomNavigationView.getMenu().getItem(position);
         }
 
         @Override

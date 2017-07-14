@@ -1,6 +1,5 @@
 package qsh.com.animalantiepidemic.fragments;
 
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,18 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.zxing.Result;
 
 import java.util.Arrays;
 import java.util.List;
 
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import qsh.com.animalantiepidemic.MainActivity;
 import qsh.com.animalantiepidemic.R;
 import qsh.com.animalantiepidemic.adapter.FarmerArrayAdapter;
@@ -42,6 +38,7 @@ public class EartagFragment extends Fragment {
     private ImageButton btnScanStart;
     private EditText eartagEndEditText;
     private ImageButton btnScanEnd;
+    private Button eartagSubmitButton;
 
     public EartagFragment() {
         // Required empty public constructor
@@ -101,6 +98,14 @@ public class EartagFragment extends Fragment {
             });
         }
 
+        eartagSubmitButton = (Button) getActivity().findViewById(R.id.eartag_btn_submit);
+        eartagSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         //启动EartagFragment时，填入扫描结果值
         if(DataHolder.getScanedResult() != null && !DataHolder.getScanedResult().equals("")){
             setScanedResultText(DataHolder.getScanedResult());
@@ -116,10 +121,12 @@ public class EartagFragment extends Fragment {
             eartagEndEditText = (EditText) getActivity().findViewById(R.id.txt_end_eartag);
         }
 
+        String processedResult = scanedResultText;
+
         if(DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX == 0){
-            eartagStartEditText.setText(scanedResultText);
+            eartagStartEditText.setText(processedResult);
         } else {
-            eartagEndEditText.setText(scanedResultText);
+            eartagEndEditText.setText(processedResult);
         }
     }
 
