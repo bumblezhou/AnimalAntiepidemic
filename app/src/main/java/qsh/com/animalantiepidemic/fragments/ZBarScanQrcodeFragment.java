@@ -79,28 +79,6 @@ public class ZBarScanQrcodeFragment  extends Fragment {
         zBarScannerView.startCamera();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("fragment", "onResume 事件开发执行...");
-        if(zBarScannerView != null){
-            zBarScannerView.setResultHandler((MainActivity)getActivity());
-            zBarScannerView.startCamera(mCameraId);
-            zBarScannerView.setFlash(mFlash);
-            zBarScannerView.setAutoFocus(mAutoFocus);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.d("fragment", "onSaveInstanceState 事件开发执行...");
-        outState.putBoolean(FLASH_STATE, mFlash);
-        outState.putBoolean(AUTO_FOCUS_STATE, mAutoFocus);
-        outState.putIntegerArrayList(SELECTED_FORMATS, mSelectedIndices);
-        outState.putInt(CAMERA_ID, mCameraId);
-    }
-
     public void setupFormats() {
         List<BarcodeFormat> formats = new ArrayList<>();
         if(mSelectedIndices == null || mSelectedIndices.isEmpty()) {
