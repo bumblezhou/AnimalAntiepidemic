@@ -23,7 +23,7 @@ import qsh.com.animalantiepidemic.localstate.DataHolder;
  * Created by JackZhou on 13/07/2017.
  */
 
-public class ScanQrcodeFragment  extends Fragment {
+public class ScanQrcodeFragment extends Fragment {
     private ZXingScannerView zXingScannerView;
     LinearLayout qrCameraLayout;
 
@@ -51,26 +51,6 @@ public class ScanQrcodeFragment  extends Fragment {
         zXingScannerView.startCamera();
     }
 
-//    @Override
-//    public void onPause(){
-//        super.onPause();
-//        Log.d("fragment", "onPause 事件开发执行...");
-//        if(zXingScannerView != null){
-//            zXingScannerView.stopCamera();
-//            DataHolder.IS_OPEN_SCAN_CAMERA = false;
-//
-//            Handler uiHandler = new Handler();
-//            uiHandler.post(new Runnable()
-//            {
-//                @Override
-//                public void run()
-//                {
-//                    ((MainActivity)getActivity()).switchToEartagFragment();
-//                }
-//            });
-//        }
-//    }
-
     @Override
     public void onStop(){
         super.onStop();
@@ -82,28 +62,13 @@ public class ScanQrcodeFragment  extends Fragment {
             public void run()
             {
                 if(DataHolder.getScanedResult() != null && !DataHolder.getScanedResult().equals("")) {
-
                     if(zXingScannerView != null){
-                    zXingScannerView.stopCamera();
-                    getActivity().onBackPressed();
-                    DataHolder.IS_OPEN_SCAN_CAMERA = false;
-                    ((MainActivity)getActivity()).switchToEartagFragment();
+                        zXingScannerView.stopCamera();
+                        DataHolder.IS_OPEN_SCAN_CAMERA = false;
+                        ((MainActivity)getActivity()).switchToEartagFragment();
                     }
                 }
             }
         });
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        Log.d("fragment", "onResume 事件开发执行...");
-//        qrCameraLayout = (LinearLayout) getView().findViewById(R.id.ll_qrcamera);
-//        zXingScannerView = new ZXingScannerView(getActivity().getApplicationContext());
-//        zXingScannerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-//        qrCameraLayout.addView(zXingScannerView);
-//
-//        zXingScannerView.setResultHandler(((MainActivity)getActivity()));
-//        zXingScannerView.startCamera();
-//    }
 }
