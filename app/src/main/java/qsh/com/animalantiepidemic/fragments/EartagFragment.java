@@ -1,5 +1,6 @@
 package qsh.com.animalantiepidemic.fragments;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.List;
 
+import qsh.com.animalantiepidemic.CaptureActivity;
 import qsh.com.animalantiepidemic.MainActivity;
 import qsh.com.animalantiepidemic.R;
 import qsh.com.animalantiepidemic.adapter.FarmerArrayAdapter;
@@ -78,7 +80,10 @@ public class EartagFragment extends Fragment {
                     DataHolder.setScanedResult("");
                     DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX = 0;
                     DataHolder.IS_OPEN_SCAN_CAMERA = true;
-                    ((MainActivity)getActivity()).switchToScanQrcodeFragment();
+                    //((MainActivity)getActivity()).switchToScanQrcodeFragment();
+                    Intent intent = new Intent(getActivity().getApplicationContext(), CaptureActivity.class);
+                    getActivity().startActivityForResult(intent, ((MainActivity)getActivity()).BARCODE_SCAN_REQUEST);
+                    //setContentView(R.layout.activity_main);
                 }
             });
         }
@@ -93,7 +98,10 @@ public class EartagFragment extends Fragment {
                     DataHolder.setScanedResult("");
                     DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX = 1;
                     DataHolder.IS_OPEN_SCAN_CAMERA = true;
-                    ((MainActivity)getActivity()).switchToScanQrcodeFragment();
+                    //((MainActivity)getActivity()).switchToScanQrcodeFragment();
+                    Intent intent = new Intent(getActivity().getApplicationContext(), CaptureActivity.class);
+                    getActivity().startActivityForResult(intent, ((MainActivity)getActivity()).BARCODE_SCAN_REQUEST);
+                    //setContentView(R.layout.activity_main);
                 }
             });
         }

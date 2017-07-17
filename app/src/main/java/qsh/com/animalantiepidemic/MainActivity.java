@@ -10,11 +10,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -29,6 +27,8 @@ import qsh.com.animalantiepidemic.fragments.ZXingScanQrcodeFragment;
 import qsh.com.animalantiepidemic.localstate.DataHolder;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, ZBarScannerView.ResultHandler {
+
+    public static final int BARCODE_SCAN_REQUEST = 1;  // The request code
 
     BottomNavigationView bottomNavigationView;
 
@@ -278,6 +278,20 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         DataHolder.setScanedResult(result.getContents());
 //        Toast.makeText(this, "Contents = " + result.getContents() + ", Format = " + result.getBarcodeFormat().getName(), Toast.LENGTH_LONG);
         switchToEartagFragment();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == BARCODE_SCAN_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+
+                // Do something with the contact here (bigger example below)
+            }
+        }
     }
 
 //    @Override
