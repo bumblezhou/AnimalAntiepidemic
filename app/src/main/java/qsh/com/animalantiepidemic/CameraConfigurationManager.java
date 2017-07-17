@@ -17,6 +17,7 @@ package qsh.com.animalantiepidemic;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.ImageFormat;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.util.Log;
@@ -46,6 +47,7 @@ public final class CameraConfigurationManager {
 
 	private static final int MIN_PREVIEW_PIXELS = 480 * 320;
 	private static final double MAX_ASPECT_DISTORTION = 0.15;
+	private float mRequestedFps = 30.0f;
 
 	private final Context context;
 
@@ -110,6 +112,16 @@ public final class CameraConfigurationManager {
 			Log.w(TAG, "In camera config safe mode -- most settings will not be honored");
 		}
 
+		//int[] previewFpsRange = selectPreviewFpsRange(camera, mRequestedFps);
+		//if (previewFpsRange == null) {
+		//	throw new RuntimeException("Could not find suitable preview frames per second range.");
+		//}
+
+		//parameters.setPreviewFpsRange(
+		//		previewFpsRange[Camera.Parameters.PREVIEW_FPS_MIN_INDEX],
+		//		previewFpsRange[Camera.Parameters.PREVIEW_FPS_MAX_INDEX]);
+		//parameters.setPreviewFormat(ImageFormat.NV21);
+
 		parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
 		camera.setParameters(parameters);
 
@@ -123,6 +135,39 @@ public final class CameraConfigurationManager {
 
 		/** 设置相机预览为竖屏 */
 		camera.setDisplayOrientation(90);
+	}
+
+	/**
+	 * Selects the most suitable preview frames per second range, given the desired frames per
+	 * second.
+	 *
+	 * @param camera            the camera to select a frames per second range from
+	 * @param desiredPreviewFps the desired frames per second for the camera preview frames
+	 * @return the selected preview frames per second range
+	 */
+	public int[] selectPreviewFpsRange(Camera camera, float desiredPreviewFps) {
+		// The camera API uses integers scaled by a factor of 1000 instead of floating-point frame
+		// rates.
+		int desiredPreviewFpsScaled = (int) (desiredPreviewFps * 1000.0f);
+
+		// The method for selecting the best range is to minimize the sum of the differences between
+		// the desired value and the upper and lower bounds of the range.  This may select a range
+		// that the desired value is outside of, but this is often preferred.  For example, if the
+		// desired frame rate is 29.97, the range (30, 30) is probably more desirable than the
+		// range (15, 30).
+		int[] selectedFpsRange = null;
+		int minDiff = Integer.MAX_VALUE;
+		List<int[]> previewFpsRangeList = camera.getParameters().getSupportedPreviewFpsRange();
+		for (int[] range : previewFpsRangeList) {
+			int deltaMin = desiredPreviewFpsScaled - range[Camera.Parameters.PREVIEW_FPS_MIN_INDEX];
+			int deltaMax = desiredPreviewFpsScaled - range[Camera.Parameters.PREVIEW_FPS_MAX_INDEX];
+			int diff = Math.abs(deltaMin) + Math.abs(deltaMax);
+			if (diff < minDiff) {
+				selectedFpsRange = range;
+				minDiff = diff;
+			}
+		}
+		return selectedFpsRange;
 	}
 
 	public Point getCameraResolution() {
