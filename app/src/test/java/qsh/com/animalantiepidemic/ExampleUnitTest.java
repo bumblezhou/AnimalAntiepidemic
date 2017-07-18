@@ -41,6 +41,11 @@ import qsh.com.animalantiepidemic.security.DesHelper;
 public class ExampleUnitTest {
 
     @Test
+    public void test_zbar_decoder(){
+
+    }
+
+    @Test
     public void test_parse_farmer_model_from_string(){
         FarmerModel farmer = new FarmerModel(2, "李义山.司马义", "13568452138", "1~25", 0);
         String farmerInfo = farmer.getHouseholder() + "(" + farmer.getMobile() + "-" + farmer.getAddress() + "-" + farmer.getBreedTypeName() + ")";

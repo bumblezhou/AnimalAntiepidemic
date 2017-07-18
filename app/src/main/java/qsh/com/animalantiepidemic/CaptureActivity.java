@@ -96,6 +96,12 @@ public class CaptureActivity extends Activity {
         animation.setRepeatCount(-1);
         animation.setRepeatMode(Animation.REVERSE);
         scanLine.startAnimation(animation);
+
+        barcodeScanned = false;
+        mCamera.setPreviewCallback(previewCb);
+        mCamera.startPreview();
+        previewing = true;
+        mCamera.autoFocus(autoFocusCB);
     }
 
     @Override
@@ -145,7 +151,7 @@ public class CaptureActivity extends Activity {
                 mCamera.setPreviewCallback(null);
                 mCamera.stopPreview();
 
-                scanResult.setText("barcode result " + result);
+                scanResult.setText("扫描结果：" + result);
                 DataHolder.setScanedResult(result);
                 finishActivity(RESULT_OK);
                 finish();
