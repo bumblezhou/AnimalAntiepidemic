@@ -1,7 +1,9 @@
 package qsh.com.animalantiepidemic;
 
+import android.provider.MediaStore;
 import android.util.Log;
 
+import com.dtr.zbar.build.ZBarDecoder;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -11,6 +13,7 @@ import com.google.gson.JsonParseException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -39,12 +42,6 @@ import qsh.com.animalantiepidemic.security.DesHelper;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
-
-    @Test
-    public void test_zbar_decoder(){
-
-    }
-
     @Test
     public void test_parse_farmer_model_from_string(){
         FarmerModel farmer = new FarmerModel(2, "李义山.司马义", "13568452138", "1~25", 0);

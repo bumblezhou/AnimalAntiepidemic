@@ -1,34 +1,18 @@
 package qsh.com.animalantiepidemic.fragments;
 
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import me.dm7.barcodescanner.zbar.BarcodeFormat;
-import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import qsh.com.animalantiepidemic.MainActivity;
-import qsh.com.animalantiepidemic.R;
-import qsh.com.animalantiepidemic.localstate.DataHolder;
 
 /**
  * Created by Administrator on 2017/7/14.
@@ -91,10 +75,10 @@ public class ZBarScanQrcodeFragment  extends Fragment {
             }
         }
 
-        for(int index : mSelectedIndices) {
-            formats.add(BarcodeFormat.ALL_FORMATS.get(index));
-        }
-//        formats.add(BarcodeFormat.DATABAR);
+        //for(int index : mSelectedIndices) {
+        //    formats.add(BarcodeFormat.ALL_FORMATS.get(index));
+        //}
+        formats.add(BarcodeFormat.QRCODE);
         if(mScannerView != null) {
             mScannerView.setFormats(formats);
         }

@@ -163,20 +163,20 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             homeFragment = new HomeFragment();
         }
 
-        if(zXingScanQrcodeFragment == null){
-            zXingScanQrcodeFragment = new ZXingScanQrcodeFragment();
+        //if(zXingScanQrcodeFragment == null){
+        //    zXingScanQrcodeFragment = new ZXingScanQrcodeFragment();
+        //}
+        if(zBarScanQrcodeFragment == null){
+            zBarScanQrcodeFragment = new ZBarScanQrcodeFragment();
         }
-//        if(zBarScanQrcodeFragment == null){
-//            zBarScanQrcodeFragment = new ZBarScanQrcodeFragment();
-//        }
 
         adapter.addFragment(homeFragment);
         adapter.addFragment(eartagFragment);
         adapter.addFragment(chipFragment);
         adapter.addFragment(antiepidemicFragment);
         adapter.addFragment(aboutFragment);
-        adapter.addFragment(zXingScanQrcodeFragment);
-//        adapter.addFragment(zBarScanQrcodeFragment);
+        //adapter.addFragment(zXingScanQrcodeFragment);
+        adapter.addFragment(zBarScanQrcodeFragment);
 
         viewPager.setAdapter(adapter);
         Log.d("fragment", "total fragment size:" + viewPager.getScrollBarSize());
