@@ -1,14 +1,19 @@
 package qsh.com.animalantiepidemic;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
+import com.dtr.zbar.build.ZBarDecoder;
 import com.google.gson.Gson;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +42,26 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("qsh.com.animalantiepidemic", appContext.getPackageName());
+    }
+
+    @Test
+    public void test_zbar_decoder(){
+        Bitmap bmp = BitmapFactory.decodeResource(InstrumentationRegistry.getTargetContext().getResources(), R.raw.qrcode_test_1);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        byte[] data = bos.toByteArray();
+
+        if(data == null){
+            Log.d("decode test", "加载图片资源失败！");
+        }
+
+        ZBarDecoder zBarDecoder = new ZBarDecoder();
+        String result = zBarDecoder.decodeCrop(data, 790, 719, 0, 0, 790, 719);
+        if(result != null){
+            Log.d("decode test", "扫描结果：" + result);
+        } else {
+            Log.d("decode test", "无扫描结果！");
+        }
     }
 
     public String loadResourceFileContent(int fileId) {
