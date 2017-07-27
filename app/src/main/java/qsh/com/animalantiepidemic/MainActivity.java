@@ -28,8 +28,6 @@ import qsh.com.animalantiepidemic.localstate.DataHolder;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, ZBarScannerView.ResultHandler {
 
-    public static final int BARCODE_SCAN_REQUEST = 1;  // The request code
-
     BottomNavigationView bottomNavigationView;
 
     //This is our viewPager
@@ -276,20 +274,24 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         Log.d("qrscan", "scan result:" + result.getContents());
         //Toast.makeText(this, "Content:" + result.getText() + " Format:" + result.getBarcodeFormat().toString(), Toast.LENGTH_LONG).show();
         DataHolder.setScanedResult(result.getContents());
-//        Toast.makeText(this, "Contents = " + result.getContents() + ", Format = " + result.getBarcodeFormat().getName(), Toast.LENGTH_LONG);
         switchToEartagFragment();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
-        if (requestCode == BARCODE_SCAN_REQUEST) {
+        if (requestCode == Static.BARCODE_SCAN_REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
 
                 // Do something with the contact here (bigger example below)
+                String result = data.getExtras().getString("result");//得到新Activity 关闭后返回的数据
+                DataHolder.IS_OPEN_SCAN_CAMERA = false;
+                Log.d("qrscan", "scan result:" + result);
+                //Toast.makeText(this, "Content:" + result.getText() + " Format:" + result.getBarcodeFormat().toString(), Toast.LENGTH_LONG).show();
+                DataHolder.setScanedResult(result);
             }
         }
     }

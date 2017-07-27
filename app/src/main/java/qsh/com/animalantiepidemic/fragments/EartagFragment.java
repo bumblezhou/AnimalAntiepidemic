@@ -18,9 +18,10 @@ import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.List;
 
-import qsh.com.animalantiepidemic.CaptureActivity;
 import qsh.com.animalantiepidemic.MainActivity;
 import qsh.com.animalantiepidemic.R;
+import qsh.com.animalantiepidemic.ScannerActivity;
+import qsh.com.animalantiepidemic.Static;
 import qsh.com.animalantiepidemic.adapter.FarmerArrayAdapter;
 import qsh.com.animalantiepidemic.databinding.FragmentEartagBinding;
 import qsh.com.animalantiepidemic.helper.LocalResourceHelper;
@@ -81,8 +82,8 @@ public class EartagFragment extends Fragment {
                     DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX = 0;
                     DataHolder.IS_OPEN_SCAN_CAMERA = true;
                     //((MainActivity)getActivity()).switchToScanQrcodeFragment();
-                    Intent intent = new Intent(getActivity().getApplicationContext(), CaptureActivity.class);
-                    getActivity().startActivityForResult(intent, ((MainActivity)getActivity()).BARCODE_SCAN_REQUEST);
+                    Intent intent = new Intent(getActivity(), ScannerActivity.class);
+                    getActivity().startActivityForResult(intent, Static.BARCODE_SCAN_REQUEST);
                     //setContentView(R.layout.activity_main);
                 }
             });
@@ -99,8 +100,8 @@ public class EartagFragment extends Fragment {
                     DataHolder.TO_SCAN_CONTENT_INTO_CONTROL_INDEX = 1;
                     DataHolder.IS_OPEN_SCAN_CAMERA = true;
                     //((MainActivity)getActivity()).switchToScanQrcodeFragment();
-                    Intent intent = new Intent(getActivity().getApplicationContext(), CaptureActivity.class);
-                    getActivity().startActivityForResult(intent, ((MainActivity)getActivity()).BARCODE_SCAN_REQUEST);
+                    Intent intent = new Intent(getActivity(), ScannerActivity.class);
+                    getActivity().startActivityForResult(intent, Static.BARCODE_SCAN_REQUEST);
                     //setContentView(R.layout.activity_main);
                 }
             });
